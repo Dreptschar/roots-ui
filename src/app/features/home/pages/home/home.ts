@@ -5,7 +5,6 @@ import {FormsModule} from '@angular/forms';
 @Component({
   selector: 'app-home',
   imports: [
-    Button,
     FormsModule,
     DatePickerModule
   ],
@@ -14,6 +13,5 @@ import {FormsModule} from '@angular/forms';
   styleUrl: './home.scss'
 })
 export class Home {
-  date: Date | undefined;
 
 }
