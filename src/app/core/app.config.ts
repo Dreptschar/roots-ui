@@ -8,9 +8,11 @@ import {routes} from './app.routes';
 import {provideHttpClient} from '@angular/common/http';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {RootsTheme} from './theme/RootsTheme';
+import {DialogService} from 'primeng/dynamicdialog';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    DialogService,
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
