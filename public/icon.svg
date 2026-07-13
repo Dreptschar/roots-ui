@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Roots">
+  <rect width="256" height="256" rx="56" fill="#103B31"/>
+  <path d="M128 58c-34 0-62 28-62 62 0 26 16 48 38 58v26h48v-26c22-10 38-32 38-58 0-34-28-62-62-62z" fill="#F5F7F2"/>
+  <path d="M112 176h32v22h-32z" fill="#CFE4D7"/>
+  <path d="M96 108c10-20 28-32 52-36-6 18-16 31-32 41" fill="none" stroke="#7BC59D" stroke-width="12" stroke-linecap="round"/>
+  <path d="M160 108c-10-20-28-32-52-36 6 18 16 31 32 41" fill="none" stroke="#7BC59D" stroke-width="12" stroke-linecap="round"/>
+</svg>

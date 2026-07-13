@@ -1,0 +1,17 @@
+{
+  "name": "Roots",
+  "short_name": "Roots",
+  "description": "Houseplant management for mobile and web",
+  "theme_color": "#103B31",
+  "background_color": "#F5F7F2",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

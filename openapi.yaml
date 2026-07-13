@@ -1,0 +1,498 @@
+openapi: 3.1.0
+info:
+  title: PlantManagerBackend API
+  version: 0.1.0
+  description: REST API for managing house plants, recurring care plans, and action history.
+
+servers:
+  - url: /api
+    description: Default API base path
+
+tags:
+  - name: Plants
+  - name: Rooms
+  - name: Action Types
+  - name: Action Plans
+  - name: Plant Actions
+
+paths:
+  /rooms:
+    get:
+      tags: [ Rooms ]
+      summary: List rooms
+      responses:
+        "200":
+          description: Room list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RoomResponse"
+    post:
+      tags: [ Rooms ]
+      summary: Create a room
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomCreateRequest"
+      responses:
+        "201":
+          description: Room created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomResponse"
+
+  /rooms/{roomId}:
+    get:
+      tags: [ Rooms ]
+      summary: Get a room by id
+      parameters:
+        - $ref: "#/components/parameters/RoomId"
+      responses:
+        "200":
+          description: Room
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomResponse"
+        "404":
+          description: Not found
+    patch:
+      tags: [ Rooms ]
+      summary: Update a room
+      parameters:
+        - $ref: "#/components/parameters/RoomId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoomUpdateRequest"
+      responses:
+        "200":
+          description: Room updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RoomResponse"
+        "404":
+          description: Not found
+    delete:
+      tags: [ Rooms ]
+      summary: Delete a room
+      parameters:
+        - $ref: "#/components/parameters/RoomId"
+      responses:
+        "204":
+          description: Room deleted
+        "404":
+          description: Not found
+
+  /plants:
+    get:
+      tags: [ Plants ]
+      summary: List plants
+      responses:
+        "200":
+          description: Plant list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlantSummaryResponse"
+    post:
+      tags: [ Plants ]
+      summary: Create a plant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlantCreateRequest"
+      responses:
+        "201":
+          description: Plant created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlantDetailResponse"
+
+  /plants/{plantId}:
+    get:
+      tags: [ Plants ]
+      summary: Get a plant by id
+      parameters:
+        - $ref: "#/components/parameters/PlantId"
+      responses:
+        "200":
+          description: Plant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlantDetailResponse"
+        "404":
+          description: Not found
+    patch:
+      tags: [ Plants ]
+      summary: Update a plant
+      parameters:
+        - $ref: "#/components/parameters/PlantId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlantUpdateRequest"
+      responses:
+        "200":
+          description: Plant updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlantDetailResponse"
+        "404":
+          description: Not found
+    delete:
+      tags: [ Plants ]
+      summary: Delete a plant
+      parameters:
+        - $ref: "#/components/parameters/PlantId"
+      responses:
+        "204":
+          description: Plant deleted
+        "404":
+          description: Not found
+
+  /plants/{plantId}/actions:
+    get:
+      tags: [ Plant Actions ]
+      summary: List actions performed on a plant
+      parameters:
+        - $ref: "#/components/parameters/PlantId"
+      responses:
+        "200":
+          description: Action history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PlantActionResponse"
+    post:
+      tags: [ Plant Actions ]
+      summary: Record an action for a plant
+      parameters:
+        - $ref: "#/components/parameters/PlantId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlantActionCreateRequest"
+      responses:
+        "201":
+          description: Action recorded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlantActionResponse"
+
+  /plants/{plantId}/action-plans:
+    get:
+      tags: [ Action Plans ]
+      summary: List action plans for a plant
+      parameters:
+        - $ref: "#/components/parameters/PlantId"
+      responses:
+        "200":
+          description: Action plan list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActionPlanResponse"
+    post:
+      tags: [ Action Plans ]
+      summary: Create an action plan for a plant
+      parameters:
+        - $ref: "#/components/parameters/PlantId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActionPlanCreateRequest"
+      responses:
+        "201":
+          description: Action plan created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ActionPlanResponse"
+
+  /action-types:
+    get:
+      tags: [ Action Types ]
+      summary: List action types
+      responses:
+        "200":
+          description: Action type list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ActionTypeResponse"
+
+components:
+  parameters:
+    PlantId:
+      name: plantId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+    RoomId:
+      name: roomId
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+  schemas:
+    PlantSummaryResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        species:
+          type: string
+        roomId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        photoPath:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - species
+        - roomId
+        - notes
+        - photoPath
+        - createdAt
+        - updatedAt
+    PlantDetailResponse:
+      allOf:
+        - $ref: "#/components/schemas/PlantSummaryResponse"
+        - type: object
+          properties:
+            room:
+              $ref: "#/components/schemas/RoomResponse"
+            actionPlans:
+              type: array
+              items:
+                $ref: "#/components/schemas/ActionPlanResponse"
+            actions:
+              type: array
+              items:
+                $ref: "#/components/schemas/PlantActionResponse"
+    PlantCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+        roomId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        photoPath:
+          type: string
+      required:
+        - name
+        - species
+        - roomId
+    PlantUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        species:
+          type: string
+        roomId:
+          type: integer
+          format: int64
+        notes:
+          type: string
+        photoPath:
+          type: string
+    RoomResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - createdAt
+        - updatedAt
+    RoomCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+      required:
+        - name
+    RoomUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    ActionTypeResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        key:
+          type: string
+        label:
+          type: string
+        icon:
+          type: string
+      required:
+        - id
+        - key
+        - label
+    ActionPlanResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        plantId:
+          type: integer
+          format: int64
+        actionTypeId:
+          type: integer
+          format: int64
+        intervalDays:
+          type: integer
+        lastPerformedAt:
+          type: string
+          format: date-time
+        nextDueAt:
+          type: string
+          format: date-time
+        active:
+          type: boolean
+        notes:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - plantId
+        - actionTypeId
+        - intervalDays
+        - active
+        - createdAt
+        - updatedAt
+    ActionPlanCreateRequest:
+      type: object
+      properties:
+        actionTypeId:
+          type: integer
+          format: int64
+        intervalDays:
+          type: integer
+        lastPerformedAt:
+          type: string
+          format: date-time
+        active:
+          type: boolean
+        notes:
+          type: string
+      required:
+        - actionTypeId
+        - intervalDays
+    PlantActionResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        plantId:
+          type: integer
+          format: int64
+        actionTypeId:
+          type: integer
+          format: int64
+        actionPlanId:
+          type: integer
+          format: int64
+        performedAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+      required:
+        - id
+        - plantId
+        - actionTypeId
+        - performedAt
+    PlantActionCreateRequest:
+      type: object
+      properties:
+        actionTypeId:
+          type: integer
+          format: int64
+        actionPlanId:
+          type: integer
+          format: int64
+        performedAt:
+          type: string
+          format: date-time
+        notes:
+          type: string
+      required:
+        - actionTypeId
