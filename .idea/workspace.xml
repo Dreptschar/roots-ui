@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3dd1afc6-083f-4ed1-83e4-f748eeeeb0fc" name="Changes" comment="add small tests" />
+    <list default="true" id="3dd1afc6-083f-4ed1-83e4-f748eeeeb0fc" name="Changes" comment="add small tests">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/nginx.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/manifest.webmanifest" beforeDir="false" afterPath="$PROJECT_DIR$/public/manifest.webmanifest" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,61 +29,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0006448044629614" />
-      <entry key="MS500" value="1.4744681813931737" />
-      <entry key="S2" value="3.256810689848319" />
-      <entry key="S5" value="4.170474503940853" />
-      <entry key="S10" value="4.5621251370701685" />
-      <entry key="S30" value="6.215585472214951" />
-      <entry key="S60" value="14.854776726683788" />
-      <entry key="M2" value="46.14644752801337" />
-      <entry key="M5" value="180.22251691754994" />
-      <entry key="M10" value="436.9459308885444" />
-      <entry key="M15" value="707.6611663666788" />
-      <entry key="M30" value="1512.3897204515024" />
-      <entry key="H1" value="2820.082056035746" />
-      <entry key="H2" value="4308.219328277476" />
-      <entry key="H4" value="5519.256711487676" />
-      <entry key="D1" value="6920.58214985794" />
-      <entry key="W1" value="7207.6290896872" />
+      <entry key="MS100" value="1.0" />
+      <entry key="MS500" value="1.0" />
+      <entry key="S2" value="1.0" />
+      <entry key="S5" value="1.0000000000001872" />
+      <entry key="S10" value="1.0000012563748881" />
+      <entry key="S30" value="1.0530446351765994" />
+      <entry key="S60" value="2.3405911478410855" />
+      <entry key="M2" value="14.307149965679198" />
+      <entry key="M5" value="109.27271250314588" />
+      <entry key="M10" value="339.0138707842597" />
+      <entry key="M15" value="597.0723726061377" />
+      <entry key="M30" value="1388.780073771185" />
+      <entry key="H1" value="2702.6656207782744" />
+      <entry key="H2" value="4218.721114517535" />
+      <entry key="H4" value="5463.402673923847" />
+      <entry key="D1" value="6912.8077409735915" />
+      <entry key="W1" value="7210.727019809734" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
       <entry key="S2" value="0.0" />
       <entry key="S5" value="0.0" />
-      <entry key="S10" value="9.4111954E-316" />
-      <entry key="S30" value="9.79974850162906E-106" />
-      <entry key="S60" value="3.130454999138108E-53" />
-      <entry key="M2" value="5.595046915922271E-27" />
-      <entry key="M5" value="3.1558873531316584E-11" />
-      <entry key="M10" value="5.6177285028135E-6" />
-      <entry key="M15" value="3.160146121377833E-4" />
-      <entry key="M30" value="0.01777679982836395" />
-      <entry key="H1" value="0.13332966597259288" />
-      <entry key="H2" value="0.3651433498951529" />
-      <entry key="H4" value="0.6042709242510403" />
-      <entry key="D1" value="0.9194722281625273" />
-      <entry key="W1" value="0.9880780028634664" />
+      <entry key="S10" value="1.1E-322" />
+      <entry key="S30" value="4.804437666355438E-108" />
+      <entry key="S60" value="2.1919027502047835E-54" />
+      <entry key="M2" value="1.480507598833623E-27" />
+      <entry key="M5" value="1.854232787871171E-11" />
+      <entry key="M10" value="4.306080338163189E-6" />
+      <entry key="M15" value="2.646801784463611E-4" />
+      <entry key="M30" value="0.01626899438952232" />
+      <entry key="H1" value="0.12754996820666645" />
+      <entry key="H2" value="0.3571413840578056" />
+      <entry key="H4" value="0.5976130721945915" />
+      <entry key="D1" value="0.9177759679074567" />
+      <entry key="W1" value="0.9878173930971553" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.9937325054178419" />
-      <entry key="MS500" value="1.4721852725782885" />
-      <entry key="S2" value="3.255320307387248" />
-      <entry key="S5" value="4.169683329516373" />
-      <entry key="S10" value="4.561687115642441" />
-      <entry key="S30" value="6.21532892869405" />
-      <entry key="S60" value="14.854331923888209" />
-      <entry key="M2" value="46.14575538408105" />
-      <entry key="M5" value="180.22159615912693" />
-      <entry key="M10" value="436.94490686361326" />
-      <entry key="M15" value="707.6603998391361" />
-      <entry key="M30" value="1512.406346576588" />
-      <entry key="H1" value="2820.2142734532176" />
-      <entry key="H2" value="4308.583589347724" />
-      <entry key="H4" value="5519.860403654246" />
-      <entry key="D1" value="6921.501498475232" />
-      <entry key="W1" value="7208.617149227742" />
+      <entry key="MS100" value="0.9726549474122855" />
+      <entry key="MS500" value="0.9944701686732144" />
+      <entry key="S2" value="0.9986146661010289" />
+      <entry key="S5" value="0.9994456359722894" />
+      <entry key="S10" value="0.9997240357717947" />
+      <entry key="S30" value="1.0529497892092117" />
+      <entry key="S60" value="2.3405059860601685" />
+      <entry key="M2" value="14.306929465894264" />
+      <entry key="M5" value="109.2721498820198" />
+      <entry key="M10" value="339.0130732058284" />
+      <entry key="M15" value="597.0717216824631" />
+      <entry key="M30" value="1388.7952849700716" />
+      <entry key="H1" value="2702.792104282907" />
+      <entry key="H2" value="4219.077391723716" />
+      <entry key="H4" value="5463.999713993996" />
+      <entry key="D1" value="6913.725393454504" />
+      <entry key="W1" value="7211.714818730482" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -115,6 +122,34 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
+  <component name="RunManager" selected="Docker.odysseus: Compose Deployment">
+    <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
+      <deployment type="docker-compose.yml" />
+      <method v="2" />
+    </configuration>
+    <configuration name="docker-compose.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <configuration name="odysseus: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value="../../odysseus/docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Docker.odysseus: Compose Deployment" />
+        <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -131,7 +166,7 @@
       <option name="presentableId" value="Default" />
       <updated>1783964027468</updated>
       <workItem from="1783964028595" duration="3745000" />
-      <workItem from="1784035649280" duration="7632000" />
+      <workItem from="1784035649280" duration="8034000" />
     </task>
     <task id="LOCAL-00001" summary="delete all">
       <option name="closed" value="true" />
@@ -173,7 +208,15 @@
       <option name="project" value="LOCAL" />
       <updated>1784043281168</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="add small tests">
+      <option name="closed" value="true" />
+      <created>1784043377163</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1784043377163</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,6 +227,9 @@
         <option value="$PROJECT_DIR$/vite.config.js" />
       </list>
     </option>
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="nginx.conf" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="delete all" />

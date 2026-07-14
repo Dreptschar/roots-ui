@@ -1,0 +1,9 @@
+services:
+  roots-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: roots-ui
+    restart: unless-stopped
+    ports:
+      - "8081:80"
