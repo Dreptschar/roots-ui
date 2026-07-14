@@ -31,6 +31,12 @@ Frontend web app for houseplant management.
    npm run build
    ```
 
+4. Run tests:
+
+   ```bash
+   npm run test
+   ```
+
 ## Environment
 
 There are no remote service environment variables for the current local-first setup.
@@ -38,4 +44,4 @@ There are no remote service environment variables for the current local-first se
 ## Data model
 
 The app stores plants, rooms, action types, action plans, and action history in IndexedDB.
-It seeds sample data on first launch so the dashboard is usable immediately.
+First launch starts empty; everything is created locally in the browser.

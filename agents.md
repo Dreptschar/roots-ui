@@ -11,11 +11,12 @@ This file is the handoff note for future agents working in this repository.
 - PWA support is included via a lightweight service worker.
 - Primary flows implemented: dashboard, plant detail, create/edit plant.
 - Plant data is now local-first and persisted in IndexedDB.
-- The app seeds local rooms, action types, plants, action plans, and action history on first load.
+- Test coverage is set up with Vitest, Testing Library, jsdom, and fake-indexeddb.
 - Dashboard is room-first; room pages list the plants in that room.
 - Dashboard last-watered state is derived from local watering action data and action plans.
 - There is no remote service dependency in the UI anymore.
-- Run path: `npm install`, `npm run dev`, `npm run build`.
+- First launch starts empty; users create rooms, action types, plants, and action plans locally.
+- Run path: `npm install`, `npm run dev`, `npm run test`, `npm run build`.
 - Current scaffold build has been verified successfully.
 
 ## Known goals

@@ -4,72 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3dd1afc6-083f-4ed1-83e4-f748eeeeb0fc" name="Changes" comment="add first ui iteration">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="3dd1afc6-083f-4ed1-83e4-f748eeeeb0fc" name="Changes" comment="make standalon pwa">
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/agents.md" beforeDir="false" afterPath="$PROJECT_DIR$/agents.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openapi.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/openapitools.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PlantCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlantCard.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PlantForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlantForm.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/env.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/env.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/.openapi-generator-ignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/.openapi-generator/FILES" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/.openapi-generator/VERSION" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/ActionPlansApi.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/ActionTypesApi.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/PlantActionsApi.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/PlantsApi.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/RoomsApi.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionPlanCreateRequest.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionPlanResponse.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionPlansApi.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionTypeResponse.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionTypesApi.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantActionCreateRequest.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantActionResponse.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantActionsApi.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantCreateRequest.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantDetailResponse.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantSummaryResponse.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantUpdateRequest.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantsApi.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/RoomCreateRequest.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/RoomResponse.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/RoomUpdateRequest.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/RoomsApi.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/ActionPlanCreateRequest.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/ActionPlanResponse.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/ActionTypeResponse.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantActionCreateRequest.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantActionResponse.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantCreateRequest.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantDetailResponse.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantSummaryResponse.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantUpdateRequest.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/RoomCreateRequest.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/RoomResponse.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/RoomUpdateRequest.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/generated/openapi/runtime.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/usePlant.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/usePlant.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/usePlants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/usePlants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useReferenceData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useReferenceData.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/backend.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/date.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/date.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/DashboardPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/DashboardPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/PlantDetailPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PlantDetailPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/PlantEditorPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PlantEditorPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/localDb.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/localDb.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,61 +26,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.6829349985306732" />
-      <entry key="MS500" value="5.0684980148082905" />
-      <entry key="S2" value="13.891956030118664" />
-      <entry key="S5" value="28.286140844148942" />
-      <entry key="S10" value="46.064506253345655" />
-      <entry key="S30" value="73.64000189490086" />
-      <entry key="S60" value="95.43537891667516" />
-      <entry key="M2" value="148.53770030399966" />
-      <entry key="M5" value="320.1067886784952" />
-      <entry key="M10" value="604.0614358296016" />
-      <entry key="M15" value="888.6618028325305" />
-      <entry key="M30" value="1698.3190171836386" />
-      <entry key="H1" value="2951.974101047405" />
-      <entry key="H2" value="4317.360697761244" />
-      <entry key="H4" value="5394.999725142557" />
-      <entry key="D1" value="6614.060071157518" />
-      <entry key="W1" value="6860.6788628327995" />
+      <entry key="MS100" value="1.6016274199870795" />
+      <entry key="MS500" value="5.520553153437976" />
+      <entry key="S2" value="15.936790222082964" />
+      <entry key="S5" value="34.81281980722901" />
+      <entry key="S10" value="61.06413216739763" />
+      <entry key="S30" value="117.32262062847998" />
+      <entry key="S60" value="161.76553757223323" />
+      <entry key="M2" value="215.04152364247636" />
+      <entry key="M5" value="360.31361321268065" />
+      <entry key="M10" value="626.4478891997193" />
+      <entry key="M15" value="903.3216836379819" />
+      <entry key="M30" value="1710.7876332580665" />
+      <entry key="H1" value="2991.4123119390065" />
+      <entry key="H2" value="4415.8417915386335" />
+      <entry key="H4" value="5556.583779383143" />
+      <entry key="D1" value="6860.957480126582" />
+      <entry key="W1" value="7126.399608691632" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
       <entry key="S2" value="0.0" />
       <entry key="S5" value="0.0" />
-      <entry key="S10" value="1.9846978967242671E-289" />
-      <entry key="S30" value="5.833082736138813E-97" />
-      <entry key="S60" value="7.6374621021244E-49" />
-      <entry key="M2" value="8.739257463950895E-25" />
-      <entry key="M5" value="2.3800704571275016E-10" />
-      <entry key="M10" value="1.542747697171499E-5" />
-      <entry key="M15" value="6.197215587316356E-4" />
-      <entry key="M30" value="0.02489420733286197" />
-      <entry key="H1" value="0.1577789825447637" />
-      <entry key="H2" value="0.39721402611795054" />
-      <entry key="H4" value="0.6302491778003418" />
-      <entry key="D1" value="0.9259454059673852" />
-      <entry key="W1" value="0.9890687560597483" />
+      <entry key="S10" value="6.406714297159416E-302" />
+      <entry key="S30" value="4.001398323024204E-101" />
+      <entry key="S60" value="6.325660695155949E-51" />
+      <entry key="M2" value="7.953402224931164E-26" />
+      <entry key="M5" value="9.124754288090377E-11" />
+      <entry key="M10" value="9.552357974915026E-6" />
+      <entry key="M15" value="4.5020162632245804E-4" />
+      <entry key="M30" value="0.021217955281373584" />
+      <entry key="H1" value="0.14566384342510214" />
+      <entry key="H2" value="0.3816593290162946" />
+      <entry key="H4" value="0.6177858277885229" />
+      <entry key="D1" value="0.9228681478402689" />
+      <entry key="W1" value="0.9885985086751177" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="1.6686971651146871" />
-      <entry key="MS500" value="5.058145285932793" />
-      <entry key="S2" value="13.883565032644974" />
-      <entry key="S5" value="28.2790280621421" />
-      <entry key="S10" value="46.05866965052539" />
-      <entry key="S30" value="73.63688373524275" />
-      <entry key="S60" value="95.4333508346154" />
-      <entry key="M2" value="148.53610790753098" />
-      <entry key="M5" value="320.10540565286277" />
-      <entry key="M10" value="604.0601442850017" />
-      <entry key="M15" value="888.6611358365698" />
-      <entry key="M30" value="1698.3426463363712" />
-      <entry key="H1" value="2952.1307216637897" />
-      <entry key="H2" value="4317.757027393569" />
-      <entry key="H4" value="5395.629407517272" />
-      <entry key="D1" value="6614.9858981060615" />
-      <entry key="W1" value="6861.667913965756" />
+      <entry key="MS100" value="1.582285091401079" />
+      <entry key="MS500" value="5.507824948709198" />
+      <entry key="S2" value="15.92739460256417" />
+      <entry key="S5" value="34.804294912488764" />
+      <entry key="S10" value="61.05651173601533" />
+      <entry key="S30" value="117.31766854667181" />
+      <entry key="S60" value="161.76212481708387" />
+      <entry key="M2" value="215.03925823626798" />
+      <entry key="M5" value="360.31208528657675" />
+      <entry key="M10" value="626.4465599772649" />
+      <entry key="M15" value="903.3208387476068" />
+      <entry key="M30" value="1710.8075890010682" />
+      <entry key="H1" value="2991.556813397551" />
+      <entry key="H2" value="4416.222554376323" />
+      <entry key="H4" value="5557.200986189201" />
+      <entry key="D1" value="6861.88022629743" />
+      <entry key="W1" value="7127.388189026321" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -197,7 +135,7 @@
       <option name="presentableId" value="Default" />
       <updated>1783964027468</updated>
       <workItem from="1783964028595" duration="3745000" />
-      <workItem from="1784035649280" duration="6978000" />
+      <workItem from="1784035649280" duration="7312000" />
     </task>
     <task id="LOCAL-00001" summary="delete all">
       <option name="closed" value="true" />
@@ -215,7 +153,23 @@
       <option name="project" value="LOCAL" />
       <updated>1783967767660</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="make standalon pwa">
+      <option name="closed" value="true" />
+      <created>1784042775971</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1784042775971</updated>
+    </task>
+    <task id="LOCAL-00004" summary="make standalon pwa">
+      <option name="closed" value="true" />
+      <created>1784042780931</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1784042780931</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -230,6 +184,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="delete all" />
     <MESSAGE value="add first ui iteration" />
-    <option name="LAST_COMMIT_MESSAGE" value="add first ui iteration" />
+    <MESSAGE value="make standalon pwa" />
+    <option name="LAST_COMMIT_MESSAGE" value="make standalon pwa" />
   </component>
 </project>

@@ -14,7 +14,7 @@ import type {
 } from '../types';
 
 const DB_NAME = 'roots-ui';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 const ROOMS_STORE = 'rooms';
 const ACTION_TYPES_STORE = 'actionTypes';
@@ -23,6 +23,18 @@ const ACTION_PLANS_STORE = 'actionPlans';
 const ACTIONS_STORE = 'actions';
 
 let dbPromise: Promise<IDBDatabase> | undefined;
+
+function trimText(value: string) {
+  return value.trim();
+}
+
+function requireText(value: string, fieldName: string) {
+  const trimmed = trimText(value);
+  if (!trimmed) {
+    throw new Error(`${fieldName} is required`);
+  }
+  return trimmed;
+}
 
 function now() {
   return new Date();
@@ -49,6 +61,17 @@ function txComplete(transaction: IDBTransaction): Promise<void> {
   });
 }
 
+function ensureIndex(
+  store: IDBObjectStore,
+  indexName: string,
+  keyPath: string,
+  options?: IDBIndexParameters
+) {
+  if (!store.indexNames.contains(indexName)) {
+    store.createIndex(indexName, keyPath, options);
+  }
+}
+
 async function openDatabase(): Promise<IDBDatabase> {
   if (!dbPromise) {
     dbPromise = new Promise<IDBDatabase>((resolve, reject) => {
@@ -58,32 +81,29 @@ async function openDatabase(): Promise<IDBDatabase> {
         const db = openRequest.result;
         const transaction = openRequest.transaction;
 
-        if (!db.objectStoreNames.contains(ROOMS_STORE)) {
-          db.createObjectStore(ROOMS_STORE, { keyPath: 'id' });
-        }
-        if (!db.objectStoreNames.contains(ACTION_TYPES_STORE)) {
-          db.createObjectStore(ACTION_TYPES_STORE, { keyPath: 'id' });
-        }
-        if (!db.objectStoreNames.contains(PLANTS_STORE)) {
-          db.createObjectStore(PLANTS_STORE, { keyPath: 'id' });
-        }
-        if (!db.objectStoreNames.contains(ACTION_PLANS_STORE)) {
-          const store = db.createObjectStore(ACTION_PLANS_STORE, { keyPath: 'id' });
-          store.createIndex('plantId', 'plantId', { unique: false });
-        }
-        if (!db.objectStoreNames.contains(ACTIONS_STORE)) {
-          const store = db.createObjectStore(ACTIONS_STORE, { keyPath: 'id' });
-          store.createIndex('plantId', 'plantId', { unique: false });
-          store.createIndex('performedAt', 'performedAt', { unique: false });
+        const roomsStore = db.objectStoreNames.contains(ROOMS_STORE)
+          ? transaction?.objectStore(ROOMS_STORE)
+          : db.createObjectStore(ROOMS_STORE, { keyPath: 'id' });
+        const actionTypesStore = db.objectStoreNames.contains(ACTION_TYPES_STORE)
+          ? transaction?.objectStore(ACTION_TYPES_STORE)
+          : db.createObjectStore(ACTION_TYPES_STORE, { keyPath: 'id' });
+        const plantsStore = db.objectStoreNames.contains(PLANTS_STORE)
+          ? transaction?.objectStore(PLANTS_STORE)
+          : db.createObjectStore(PLANTS_STORE, { keyPath: 'id' });
+        const actionPlansStore = db.objectStoreNames.contains(ACTION_PLANS_STORE)
+          ? transaction?.objectStore(ACTION_PLANS_STORE)
+          : db.createObjectStore(ACTION_PLANS_STORE, { keyPath: 'id' });
+        const actionsStore = db.objectStoreNames.contains(ACTIONS_STORE)
+          ? transaction?.objectStore(ACTIONS_STORE)
+          : db.createObjectStore(ACTIONS_STORE, { keyPath: 'id' });
+
+        if (!roomsStore || !actionTypesStore || !plantsStore || !actionPlansStore || !actionsStore) {
+          throw new Error('Failed to initialize IndexedDB stores');
         }
 
-        if (transaction) {
-          for (const storeName of [ROOMS_STORE, ACTION_TYPES_STORE, PLANTS_STORE, ACTION_PLANS_STORE, ACTIONS_STORE]) {
-            if (db.objectStoreNames.contains(storeName)) {
-              transaction.objectStore(storeName).clear();
-            }
-          }
-        }
+        ensureIndex(actionPlansStore, 'plantId', 'plantId', { unique: false });
+        ensureIndex(actionsStore, 'plantId', 'plantId', { unique: false });
+        ensureIndex(actionsStore, 'performedAt', 'performedAt', { unique: false });
       };
 
       openRequest.onsuccess = () => {
@@ -103,6 +123,21 @@ async function openDatabase(): Promise<IDBDatabase> {
   }
 
   return dbPromise;
+}
+
+export async function __resetLocalDbForTests() {
+  if (dbPromise) {
+    const db = await dbPromise;
+    db.close();
+    dbPromise = undefined;
+  }
+
+  await new Promise<void>((resolve, reject) => {
+    const deleteRequest = indexedDB.deleteDatabase(DB_NAME);
+    deleteRequest.onsuccess = () => resolve();
+    deleteRequest.onerror = () => reject(deleteRequest.error ?? new Error('Failed to delete IndexedDB database'));
+    deleteRequest.onblocked = () => resolve();
+  });
 }
 
 async function readAll<T>(db: IDBDatabase, storeName: string) {
@@ -171,13 +206,14 @@ export async function createRoom(draft: RoomCreateRequest) {
   const db = await openDatabase();
   const currentRooms = await readAll<RoomRecord>(db, ROOMS_STORE);
   const id = nextId(currentRooms);
+  const name = requireText(draft.name, 'Room name');
 
   const transaction = db.transaction(ROOMS_STORE, 'readwrite');
   const store = transaction.objectStore(ROOMS_STORE);
   const timestamp = now();
   const room: RoomRecord = {
     id,
-    name: draft.name.trim(),
+    name,
     createdAt: timestamp,
     updatedAt: timestamp
   };
@@ -193,12 +229,13 @@ export async function updateRoom(roomId: number, draft: RoomCreateRequest) {
   if (!existing) {
     return undefined;
   }
+  const name = requireText(draft.name, 'Room name');
 
   const transaction = db.transaction(ROOMS_STORE, 'readwrite');
   const store = transaction.objectStore(ROOMS_STORE);
   const room: RoomRecord = {
     ...existing,
-    name: draft.name.trim(),
+    name,
     updatedAt: now()
   };
 
@@ -225,7 +262,8 @@ export async function createActionType(draft: ActionTypeCreateRequest) {
   const db = await openDatabase();
   const existingItems = await readAll<ActionTypeRecord>(db, ACTION_TYPES_STORE);
   const id = nextId(existingItems);
-  const slug = draft.label.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const label = requireText(draft.label, 'Action type label');
+  const slug = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
   const uniqueKey = existingItems.some((item) => item.key === slug)
     ? `${slug || 'action'}-${id}`
     : slug || `action-${id}`;
@@ -235,7 +273,7 @@ export async function createActionType(draft: ActionTypeCreateRequest) {
   const actionType: ActionTypeRecord = {
     id,
     key: uniqueKey,
-    label: draft.label.trim(),
+    label,
     icon: undefined
   };
 
@@ -270,19 +308,21 @@ export async function getPlant(plantId: number) {
 export async function savePlant(draft: PlantCreateRequest | PlantUpdateRequest, existingId?: number) {
   const db = await openDatabase();
   const currentPlants = await readAll<PlantRecord>(db, PLANTS_STORE);
-  const existing = existingId ? await readOne<PlantRecord>(db, PLANTS_STORE, existingId) : undefined;
+  const existing = existingId !== undefined ? await readOne<PlantRecord>(db, PLANTS_STORE, existingId) : undefined;
   const id = existing?.id ?? nextId(currentPlants);
   const timestamp = now();
   const createdAt = existing?.createdAt ?? timestamp;
+  const name = requireText(draft.name, 'Plant name');
+  const species = requireText(draft.species, 'Plant species');
 
   const transaction = db.transaction(PLANTS_STORE, 'readwrite');
   const store = transaction.objectStore(PLANTS_STORE);
   const plant: PlantRecord = {
     id,
-    name: draft.name.trim(),
-    species: draft.species.trim(),
+    name,
+    species,
     roomId: draft.roomId,
-    notes: draft.notes.trim(),
+    notes: trimText(draft.notes),
     photoBlob: draft.photoFile ?? existing?.photoBlob,
     createdAt,
     updatedAt: timestamp
@@ -295,8 +335,7 @@ export async function savePlant(draft: PlantCreateRequest | PlantUpdateRequest, 
 
 export async function deletePlant(plantId: number) {
   const db = await openDatabase();
-  const plans = (await readAll<ActionPlanRecord>(db, ACTION_PLANS_STORE)).filter((plan) => plan.plantId === plantId);
-  const actions = (await readAll<PlantActionRecord>(db, ACTIONS_STORE)).filter((action) => action.plantId === plantId);
+  const [plans, actions] = await Promise.all([getActionPlansForPlant(db, plantId), getActionsForPlant(db, plantId)]);
 
   const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE, ACTIONS_STORE], 'readwrite');
   transaction.objectStore(PLANTS_STORE).delete(plantId);
@@ -312,7 +351,7 @@ export async function deletePlant(plantId: number) {
 
 export async function createActionPlan(plantId: number, draft: ActionPlanCreateRequest) {
   const db = await openDatabase();
-  const existingPlans = (await readAll<ActionPlanRecord>(db, ACTION_PLANS_STORE)).filter((plan) => plan.plantId === plantId);
+  const existingPlans = await getActionPlansForPlant(db, plantId);
   const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
   const matchingPlan = existingPlans.find((plan) => plan.actionTypeId === draft.actionTypeId);
   const timestamp = now();
@@ -354,7 +393,7 @@ export async function createActionPlan(plantId: number, draft: ActionPlanCreateR
 
 export async function logAction(plantId: number, draft: PlantActionCreateRequest) {
   const db = await openDatabase();
-  const existingActions = (await readAll<PlantActionRecord>(db, ACTIONS_STORE)).filter((action) => action.plantId === plantId);
+  const existingActions = await getActionsForPlant(db, plantId);
   const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
   const plan = draft.actionPlanId ? await readOne<ActionPlanRecord>(db, ACTION_PLANS_STORE, draft.actionPlanId) : undefined;
   const timestamp = now();
