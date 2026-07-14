@@ -1,15 +1,19 @@
 import { Layout } from '../components/Layout';
-import { PlantCard } from '../components/PlantCard';
+import { Link } from 'react-router-dom';
 import { usePlants } from '../hooks/usePlants';
+import { PlantCard } from '../components/PlantCard';
 
 export function DashboardPage() {
   const { plants, loading } = usePlants();
 
   return (
-    <Layout title="Plant dashboard" subtitle="Keep care tasks close at hand on mobile and desktop.">
+    <Layout title="Plants">
       <section className="panel">
         <div className="panelHeader">
-          <h2>My plants</h2>
+          <h2>Plants</h2>
+          <Link className="primaryButton" to="/plants/new">
+            Add plant
+          </Link>
         </div>
         {loading ? <p>Loading plants…</p> : null}
         <div className="grid">

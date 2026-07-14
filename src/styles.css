@@ -52,6 +52,17 @@ select {
   padding: 8px 0 20px;
 }
 
+.topbarMain {
+  min-width: 0;
+}
+
+.topbarActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .brand {
   display: inline-flex;
   margin-bottom: 8px;
@@ -116,9 +127,99 @@ select {
   margin-top: 16px;
 }
 
+.roomGrid {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
 .card {
   display: block;
   padding: 16px;
+}
+
+.cardMedia,
+.detailPhoto {
+  overflow: hidden;
+  border-radius: 18px;
+  background: #e7eee8;
+  border: 1px solid rgba(16, 59, 49, 0.08);
+}
+
+.cardMedia {
+  margin-bottom: 14px;
+  aspect-ratio: 16 / 10;
+}
+
+.cardMedia img,
+.detailPhoto img,
+.photoPreview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detailPhoto {
+  min-height: 220px;
+}
+
+.photoPreview {
+  aspect-ratio: 16 / 10;
+  border-radius: 18px;
+  border: 1px solid rgba(16, 59, 49, 0.08);
+  background: #e7eee8;
+}
+
+.photoPlaceholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: #6a7d76;
+  font-weight: 600;
+}
+
+.photoPlaceholder.large {
+  min-height: 220px;
+}
+
+.roomCard {
+  display: grid;
+  gap: 16px;
+}
+
+.roomCardHeader {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.roomCardHeader h2 {
+  margin: 0;
+}
+
+.roomSummary {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.roomSummaryTitle {
+  display: grid;
+  gap: 4px;
+}
+
+.roomSummary h2 {
+  margin: 0;
+}
+
+.roomSummary p {
+  margin: 4px 0 0;
+  color: #5c726c;
 }
 
 .meta {
@@ -265,12 +366,55 @@ select {
   border-radius: 12px;
 }
 
+.manualActionButton {
+  margin-top: 4px;
+}
+
 .compactForm {
   padding-top: 4px;
 }
 
 .detailHero {
   flex-wrap: wrap;
+}
+
+.detailTitleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+}
+
+.detailTitleRow h2 {
+  margin: 0;
+}
+
+.detailSubtitle {
+  margin: 4px 0 0;
+  color: #51665f;
+}
+
+.inlineMeta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #e6f1eb;
+  color: #2d5a4d;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.inlineMetaLink {
+  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.inlineMetaLink:hover,
+.inlineMetaLink:focus-visible {
+  background: #d7e8de;
+  color: #1d4e41;
+  transform: translateY(-1px);
 }
 
 .detailStats {
@@ -295,6 +439,15 @@ select {
 .stack {
   display: grid;
   gap: 18px;
+}
+
+.detailPage {
+  gap: 14px;
+}
+
+.detailPage > section {
+  display: grid;
+  gap: 10px;
 }
 
 .sectionHeading {
@@ -330,8 +483,8 @@ select {
   left: 50%;
   bottom: 12px;
   transform: translateX(-50%);
-  width: min(100% - 24px, 440px);
-  padding: 10px;
+  width: min(100% - 24px, 520px);
+  padding: 8px;
   display: flex;
   justify-content: space-around;
   gap: 8px;
@@ -342,9 +495,16 @@ select {
 }
 
 .bottomNav a {
-  padding: 8px 12px;
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
   border-radius: 12px;
   color: #38564d;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
 }
 
 .bottomNav a.active {
@@ -353,8 +513,22 @@ select {
   font-weight: 700;
 }
 
+.navIcon {
+  width: 22px;
+  height: 22px;
+}
+
+.navIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
 @media (min-width: 720px) {
   .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .roomGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 

@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
-import type { PlantCreateRequest, PlantSummaryResponse, PlantUpdateRequest, PlantViewModel } from '../types';
-import { actionTypesApi, plantsApi, roomsApi } from '../lib/backend';
+import { useEffect, useState } from 'react';
+import type { PlantRecord, PlantViewModel } from '../types';
+import { getActionTypes, getPlant, getPlants, getRooms } from '../lib/localDb';
 
 function deriveWateringState(
-  plant: PlantSummaryResponse,
+  plant: PlantRecord,
   roomsById: Map<number, string>,
   wateringActionTypeId: number | undefined,
   actions: Array<{ actionTypeId: number; performedAt: Date }>,
@@ -35,26 +35,12 @@ export function usePlants() {
   const refresh = async () => {
     setLoading(true);
     try {
-      const [plantItems, rooms, actionTypes] = await Promise.all([
-        plantsApi.plantsGet().catch(() => []),
-        roomsApi.roomsGet().catch(() => []),
-        actionTypesApi.actionTypesGet().catch(() => [])
-      ]);
+      const [plantItems, rooms, actionTypes] = await Promise.all([getPlants(), getRooms(), getActionTypes()]);
       const roomNames = new Map(rooms.map((room) => [room.id, room.name]));
       const wateringActionTypeId = actionTypes.find((actionType) => actionType.key === 'watering')?.id;
 
-      setPlants(
-        plantItems.map((plant) => ({
-          ...plant,
-          roomName: roomNames.get(plant.roomId)
-        }))
-      );
-
       const detailData = await Promise.all(
-        plantItems.map(async (plant) => {
-          const detail = await plantsApi.plantsPlantIdGet({ plantId: plant.id }).catch(() => undefined);
-          return { plant, detail };
-        })
+        plantItems.map(async (plant) => ({ plant, detail: await getPlant(plant.id) }))
       );
       setPlants(
         detailData.map(({ plant, detail }) =>
@@ -78,23 +64,5 @@ export function usePlants() {
     void refresh();
   }, []);
 
-  const actions = useMemo(
-    () => ({
-      refresh,
-      save: async (draft: PlantCreateRequest | PlantUpdateRequest, existing?: PlantSummaryResponse) => {
-        const saved = existing
-          ? await plantsApi.plantsPlantIdPatch({ plantId: existing.id, plantUpdateRequest: draft as PlantUpdateRequest })
-          : await plantsApi.plantsPost({ plantCreateRequest: draft as PlantCreateRequest });
-        await refresh();
-        return saved;
-      },
-      remove: async (id: number) => {
-        await plantsApi.plantsPlantIdDelete({ plantId: id });
-        await refresh();
-      }
-    }),
-    []
-  );
-
-  return { plants, loading, ...actions };
+  return { plants, loading, refresh };
 }

@@ -4,8 +4,72 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3dd1afc6-083f-4ed1-83e4-f748eeeeb0fc" name="Changes" comment="delete all">
-      <change afterPath="$PROJECT_DIR$/openapi.yaml" afterDir="false" />
+    <list default="true" id="3dd1afc6-083f-4ed1-83e4-f748eeeeb0fc" name="Changes" comment="add first ui iteration">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agents.md" beforeDir="false" afterPath="$PROJECT_DIR$/agents.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openapi.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/openapitools.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PlantCard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlantCard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PlantForm.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PlantForm.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/env.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/env.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/.openapi-generator-ignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/.openapi-generator/FILES" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/.openapi-generator/VERSION" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/ActionPlansApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/ActionTypesApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/PlantActionsApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/PlantsApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/RoomsApi.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/apis/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionPlanCreateRequest.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionPlanResponse.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionPlansApi.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionTypeResponse.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/ActionTypesApi.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantActionCreateRequest.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantActionResponse.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantActionsApi.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantCreateRequest.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantDetailResponse.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantSummaryResponse.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantUpdateRequest.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/PlantsApi.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/RoomCreateRequest.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/RoomResponse.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/RoomUpdateRequest.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/docs/RoomsApi.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/ActionPlanCreateRequest.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/ActionPlanResponse.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/ActionTypeResponse.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantActionCreateRequest.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantActionResponse.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantCreateRequest.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantDetailResponse.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantSummaryResponse.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/PlantUpdateRequest.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/RoomCreateRequest.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/RoomResponse.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/RoomUpdateRequest.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/models/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/generated/openapi/runtime.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/usePlant.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/usePlant.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/usePlants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/usePlants.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useReferenceData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useReferenceData.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/backend.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/date.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/date.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/DashboardPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/DashboardPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PlantDetailPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PlantDetailPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PlantEditorPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/PlantEditorPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/types.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +77,6 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="69" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -25,67 +88,67 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="2.6015404122633496" />
-      <entry key="MS500" value="6.8355885298788905" />
-      <entry key="S2" value="13.393671255730755" />
-      <entry key="S5" value="24.089042918220922" />
-      <entry key="S10" value="39.02548023004246" />
-      <entry key="S30" value="72.12231954363125" />
-      <entry key="S60" value="107.25719507345296" />
-      <entry key="M2" value="166.93675160547784" />
-      <entry key="M5" value="303.1613577639542" />
-      <entry key="M10" value="494.73845062398175" />
-      <entry key="M15" value="686.923514971823" />
-      <entry key="M30" value="1145.493582393587" />
-      <entry key="H1" value="1612.581273756215" />
-      <entry key="H2" value="1956.2695083424303" />
-      <entry key="H4" value="2166.2350769521936" />
-      <entry key="D1" value="2364.536333103486" />
-      <entry key="W1" value="2400.8737796275677" />
+      <entry key="MS100" value="1.6829349985306732" />
+      <entry key="MS500" value="5.0684980148082905" />
+      <entry key="S2" value="13.891956030118664" />
+      <entry key="S5" value="28.286140844148942" />
+      <entry key="S10" value="46.064506253345655" />
+      <entry key="S30" value="73.64000189490086" />
+      <entry key="S60" value="95.43537891667516" />
+      <entry key="M2" value="148.53770030399966" />
+      <entry key="M5" value="320.1067886784952" />
+      <entry key="M10" value="604.0614358296016" />
+      <entry key="M15" value="888.6618028325305" />
+      <entry key="M30" value="1698.3190171836386" />
+      <entry key="H1" value="2951.974101047405" />
+      <entry key="H2" value="4317.360697761244" />
+      <entry key="H4" value="5394.999725142557" />
+      <entry key="D1" value="6614.060071157518" />
+      <entry key="W1" value="6860.6788628327995" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
       <entry key="S2" value="0.0" />
-      <entry key="S5" value="8.567864453899499E-165" />
-      <entry key="S10" value="9.256275954129588E-83" />
-      <entry key="S30" value="4.523543432639534E-28" />
-      <entry key="S60" value="2.126862344544062E-14" />
-      <entry key="M2" value="1.4583766127252337E-7" />
-      <entry key="M5" value="0.0018430956599152094" />
-      <entry key="M10" value="0.042931289986620234" />
-      <entry key="M15" value="0.12260719557474989" />
-      <entry key="M30" value="0.3501531030488587" />
-      <entry key="H1" value="0.5917373598555835" />
-      <entry key="H2" value="0.7692446683959806" />
-      <entry key="H4" value="0.8770659430145502" />
-      <entry key="D1" value="0.9783750624993949" />
-      <entry key="W1" value="0.9968817030223197" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="1.9846978967242671E-289" />
+      <entry key="S30" value="5.833082736138813E-97" />
+      <entry key="S60" value="7.6374621021244E-49" />
+      <entry key="M2" value="8.739257463950895E-25" />
+      <entry key="M5" value="2.3800704571275016E-10" />
+      <entry key="M10" value="1.542747697171499E-5" />
+      <entry key="M15" value="6.197215587316356E-4" />
+      <entry key="M30" value="0.02489420733286197" />
+      <entry key="H1" value="0.1577789825447637" />
+      <entry key="H2" value="0.39721402611795054" />
+      <entry key="H4" value="0.6302491778003418" />
+      <entry key="D1" value="0.9259454059673852" />
+      <entry key="W1" value="0.9890687560597483" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="2.5801031800823155" />
-      <entry key="MS500" value="6.821091312103078" />
-      <entry key="S2" value="13.385881406571626" />
-      <entry key="S5" value="24.083505624815054" />
-      <entry key="S10" value="39.02107185049483" />
-      <entry key="S30" value="72.11965725192816" />
-      <entry key="S60" value="107.25522292435897" />
-      <entry key="M2" value="166.93519791104762" />
-      <entry key="M5" value="303.16202644515135" />
-      <entry key="M10" value="494.78032441995083" />
-      <entry key="M15" value="687.0450489802298" />
-      <entry key="M30" value="1145.8427225566265" />
-      <entry key="H1" value="1613.1722522160171" />
-      <entry key="H2" value="1957.038279259176" />
-      <entry key="H4" value="2167.1118770233734" />
-      <entry key="D1" value="2365.514659272769" />
-      <entry key="W1" value="2401.8706542256923" />
+      <entry key="MS100" value="1.6686971651146871" />
+      <entry key="MS500" value="5.058145285932793" />
+      <entry key="S2" value="13.883565032644974" />
+      <entry key="S5" value="28.2790280621421" />
+      <entry key="S10" value="46.05866965052539" />
+      <entry key="S30" value="73.63688373524275" />
+      <entry key="S60" value="95.4333508346154" />
+      <entry key="M2" value="148.53610790753098" />
+      <entry key="M5" value="320.10540565286277" />
+      <entry key="M10" value="604.0601442850017" />
+      <entry key="M15" value="888.6611358365698" />
+      <entry key="M30" value="1698.3426463363712" />
+      <entry key="H1" value="2952.1307216637897" />
+      <entry key="H2" value="4317.757027393569" />
+      <entry key="H4" value="5395.629407517272" />
+      <entry key="D1" value="6614.9858981060615" />
+      <entry key="W1" value="6861.667913965756" />
     </decayedShown>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4,
-  "fromUser": false
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3GSTZfB5SrK192bZHGLcvBm1UzI" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -93,11 +156,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "/home/dreptschar/Workspace/roots-ui",
@@ -106,6 +172,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/home/dreptschar/.local/share/JetBrains/Toolbox/apps/intellij-idea/plugins/javascript-plugin/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -129,7 +196,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1783964027468</updated>
-      <workItem from="1783964028595" duration="3719000" />
+      <workItem from="1783964028595" duration="3745000" />
+      <workItem from="1784035649280" duration="6978000" />
     </task>
     <task id="LOCAL-00001" summary="delete all">
       <option name="closed" value="true" />
@@ -139,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1783964052575</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add first ui iteration">
+      <option name="closed" value="true" />
+      <created>1783967767660</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1783967767660</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,6 +229,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="delete all" />
-    <option name="LAST_COMMIT_MESSAGE" value="delete all" />
+    <MESSAGE value="add first ui iteration" />
+    <option name="LAST_COMMIT_MESSAGE" value="add first ui iteration" />
   </component>
 </project>

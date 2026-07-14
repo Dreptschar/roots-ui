@@ -9,7 +9,7 @@ Frontend web app for houseplant management.
 - Vite
 - React Router
 - PWA support via a lightweight service worker
-- OpenAPI Generator client for backend access
+- IndexedDB for local persistence
 
 ## Run locally
 
@@ -33,16 +33,9 @@ Frontend web app for houseplant management.
 
 ## Environment
 
-Set `VITE_API_BASE_URL` when the backend is available.
+There are no remote service environment variables for the current local-first setup.
 
-Default backend target in development is `/api`, which Vite proxies to `http://localhost:8081`.
+## Data model
 
-Set `VITE_API_BASE_URL=http://localhost:8081/api` if you need to bypass the proxy.
-
-If the backend is not reachable, the app currently shows backend failure states instead of faking data.
-
-## Regenerate the API client
-
-```bash
-npm run generate:api
-```
+The app stores plants, rooms, action types, action plans, and action history in IndexedDB.
+It seeds sample data on first launch so the dashboard is usable immediately.

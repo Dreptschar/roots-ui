@@ -2,21 +2,21 @@ import { useEffect, useState } from 'react';
 import type {
   ActionPlanCreateRequest,
   PlantActionCreateRequest,
-  PlantDetailResponse,
+  PlantDetailRecord,
   PlantCreateRequest,
   PlantUpdateRequest
 } from '../types';
-import { actionPlansApi, plantActionsApi, plantsApi } from '../lib/backend';
+import { createActionPlan, deletePlant, getPlant, logAction, savePlant } from '../lib/localDb';
 
 export function usePlant(id: number | undefined) {
-  const [plant, setPlant] = useState<PlantDetailResponse | undefined>();
+  const [plant, setPlant] = useState<PlantDetailRecord | undefined>();
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
     if (id === undefined) return;
     setLoading(true);
     try {
-      setPlant(await plantsApi.plantsPlantIdGet({ plantId: id }));
+      setPlant(await getPlant(id));
     } catch {
       setPlant(undefined);
     } finally {
@@ -38,25 +38,23 @@ export function usePlant(id: number | undefined) {
     loading,
     refresh,
     savePlant: async (draft: PlantCreateRequest | PlantUpdateRequest, existingId?: number) => {
-      const saved = existingId
-        ? await plantsApi.plantsPlantIdPatch({ plantId: existingId, plantUpdateRequest: draft as PlantUpdateRequest })
-        : await plantsApi.plantsPost({ plantCreateRequest: draft as PlantCreateRequest });
+      const saved = await savePlant(draft, existingId);
       await refresh();
       return saved;
     },
     removePlant: async () => {
       if (id === undefined) return;
-      await plantsApi.plantsPlantIdDelete({ plantId: id });
+      await deletePlant(id);
     },
     createActionPlan: async (draft: ActionPlanCreateRequest) => {
       if (id === undefined) return;
-      const saved = await actionPlansApi.plantsPlantIdActionPlansPost({ plantId: id, actionPlanCreateRequest: draft });
+      const saved = await createActionPlan(id, draft);
       await refresh();
       return saved;
     },
     logAction: async (draft: PlantActionCreateRequest) => {
       if (id === undefined) return;
-      const saved = await plantActionsApi.plantsPlantIdActionsPost({ plantId: id, plantActionCreateRequest: draft });
+      const saved = await logAction(id, draft);
       await refresh();
       return saved;
     }

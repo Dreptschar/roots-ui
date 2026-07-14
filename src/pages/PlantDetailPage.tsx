@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { formatDate } from '../lib/date';
+import { useObjectUrl } from '../hooks/useObjectUrl';
 import { usePlant } from '../hooks/usePlant';
 import { useReferenceData } from '../hooks/useReferenceData';
 
@@ -15,27 +16,24 @@ export function PlantDetailPage() {
   const [planIntervalDays, setPlanIntervalDays] = useState(7);
   const [planNotes, setPlanNotes] = useState('');
   const [planModalOpen, setPlanModalOpen] = useState(false);
+  const [manualActionTypeId, setManualActionTypeId] = useState<number | undefined>();
+  const [manualLogModalOpen, setManualLogModalOpen] = useState(false);
+  const photoUrl = useObjectUrl(plant?.photoBlob);
 
-  const roomName = useMemo(
-    () => rooms.find((room) => room.id === plant?.roomId)?.name ?? plant?.room?.name ?? 'Unassigned',
-    [rooms, plant]
-  );
-
-  const actionTypeOptions = actionTypes;
   const wateringActionTypeId = actionTypes.find((actionType) => actionType.key === 'watering')?.id;
 
   useEffect(() => {
-    if (!planModalOpen) return;
+    if (!planModalOpen && !manualLogModalOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = previousOverflow;
     };
-  }, [planModalOpen]);
+  }, [planModalOpen, manualLogModalOpen]);
 
   if (loading || referenceLoading) {
     return (
-      <Layout title="Plant detail">
+      <Layout title="Plant">
         <p>Loading…</p>
       </Layout>
     );
@@ -43,7 +41,7 @@ export function PlantDetailPage() {
 
   if (!plant) {
     return (
-      <Layout title="Plant detail">
+      <Layout title="Plant">
         <section className="panel">
           <p>Plant not found.</p>
           <Link to="/">Back to dashboard</Link>
@@ -53,28 +51,13 @@ export function PlantDetailPage() {
   }
 
   const wateringPlan = plant.actionPlans?.find((plan) => plan.actionTypeId === wateringActionTypeId);
+  const room = plant.room ?? rooms.find((item) => item.id === plant.roomId);
 
   return (
-    <Layout title={plant.name} subtitle={plant.species}>
-      <section className="panel stack">
-        <div className="detailHero">
-          <div>
-            <h2>{plant.name}</h2>
-            <p>{roomName}</p>
-          </div>
-          <div className="detailStats">
-            <div>
-              <strong>{formatDate(plant.updatedAt)}</strong>
-              <span>updated</span>
-            </div>
-            <div>
-              <strong>{plant.notes ? 'Notes set' : 'No notes'}</strong>
-              <span>plant notes</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="buttonRow">
+    <Layout
+      title="Plant"
+      actions={
+        <>
           <Link className="secondaryButton" to={`/plants/${plant.id}/edit`}>
             Edit
           </Link>
@@ -88,12 +71,29 @@ export function PlantDetailPage() {
           >
             Delete
           </button>
+        </>
+      }
+    >
+      <section className="panel stack detailPage">
+        <div className="detailHero">
+          <div>
+            <div className="detailTitleRow">
+              <h2>{plant.name}</h2>
+              {room ? (
+                <Link className="inlineMeta inlineMetaLink" to={`/rooms/${room.id}`}>
+                  {room.name}
+                </Link>
+              ) : (
+                <span className="inlineMeta">Unassigned</span>
+              )}
+            </div>
+            <p className="detailSubtitle">{plant.species}</p>
+          </div>
         </div>
 
-        <section>
-          <h3>Room</h3>
-          <p>{roomName}</p>
-        </section>
+        <div className="detailPhoto">
+          {photoUrl ? <img src={photoUrl} alt={plant.name} /> : <div className="photoPlaceholder large">No photo yet</div>}
+        </div>
 
         <section>
           <div className="sectionHeading">
@@ -113,22 +113,6 @@ export function PlantDetailPage() {
                       <span>Every {plan.intervalDays} days</span>
                     </div>
                     <span>Last done {plan.lastPerformedAt ? formatDate(plan.lastPerformedAt) : 'Not set'}</span>
-                    <div className="buttonRow compactButtons">
-                      <button
-                        className="secondaryButton"
-                        type="button"
-                        onClick={async () => {
-                          await logAction({
-                            actionTypeId: plan.actionTypeId,
-                            actionPlanId: plan.id,
-                            performedAt: new Date(),
-                            notes: 'Logged from schedule'
-                          });
-                        }}
-                      >
-                        Log now
-                      </button>
-                    </div>
                   </div>
                 );
               })
@@ -136,6 +120,16 @@ export function PlantDetailPage() {
               <p>No action plans yet.</p>
             )}
           </div>
+          <button
+            className="secondaryButton manualActionButton"
+            type="button"
+            onClick={() => {
+              setManualActionTypeId(undefined);
+              setManualLogModalOpen(true);
+            }}
+          >
+            Log action
+          </button>
         </section>
 
         <section>
@@ -149,23 +143,6 @@ export function PlantDetailPage() {
                     <div className="compactRow">
                       <strong>{actionType?.label ?? `Action ${entry.actionTypeId}`}</strong>
                       <span>{formatDate(entry.performedAt)}</span>
-                    </div>
-                    <div className="compactRow">
-                      <p>{entry.notes || 'No notes.'}</p>
-                      <button
-                        className="secondaryButton"
-                        type="button"
-                        onClick={async () => {
-                          await logAction({
-                            actionTypeId: entry.actionTypeId,
-                            actionPlanId: entry.actionPlanId,
-                            performedAt: new Date(),
-                            notes: entry.notes ?? ''
-                          });
-                        }}
-                      >
-                        Repeat
-                      </button>
                     </div>
                   </div>
                 );
@@ -203,15 +180,15 @@ export function PlantDetailPage() {
             </div>
             <div className="form compactForm">
               <label>
-                Action type
+                Action
                 <select
                   value={planActionTypeId ?? ''}
                   onChange={(event) => setPlanActionTypeId(event.target.value ? Number(event.target.value) : undefined)}
                 >
                   <option value="" disabled>
-                    Choose an action type
+                    Choose an action
                   </option>
-                  {actionTypeOptions.map((actionType) => (
+                  {actionTypes.map((actionType) => (
                     <option key={actionType.id} value={actionType.id}>
                       {actionType.label}
                     </option>
@@ -243,7 +220,74 @@ export function PlantDetailPage() {
                   setPlanModalOpen(false);
                 }}
               >
-                Save action plan
+                Save plan
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : null}
+
+      {manualLogModalOpen ? (
+        <div
+          className="modalBackdrop"
+          role="presentation"
+          onClick={() => {
+            setManualLogModalOpen(false);
+            setManualActionTypeId(undefined);
+          }}
+        >
+          <section
+            className="modalCard panel stack"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="log-action-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="sectionHeading">
+              <h3 id="log-action-title">Log action</h3>
+              <button
+                className="secondaryButton"
+                type="button"
+                onClick={() => {
+                  setManualLogModalOpen(false);
+                  setManualActionTypeId(undefined);
+                }}
+              >
+                Close
+              </button>
+            </div>
+            <div className="form compactForm">
+              <label>
+                Action
+                <select
+                  value={manualActionTypeId ?? ''}
+                  onChange={(event) => setManualActionTypeId(event.target.value ? Number(event.target.value) : undefined)}
+                >
+                  <option value="" disabled>
+                    Choose an action
+                  </option>
+                  {actionTypes.map((actionType) => (
+                    <option key={actionType.id} value={actionType.id}>
+                      {actionType.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                className="primaryButton"
+                type="button"
+                disabled={manualActionTypeId === undefined}
+                onClick={async () => {
+                  if (manualActionTypeId === undefined) return;
+                  await logAction({
+                    actionTypeId: manualActionTypeId,
+                    performedAt: new Date()
+                  });
+                  setManualLogModalOpen(false);
+                  setManualActionTypeId(undefined);
+                }}
+              >
+                Save action
               </button>
             </div>
           </section>

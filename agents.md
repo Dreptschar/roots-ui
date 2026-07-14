@@ -10,18 +10,13 @@ This file is the handoff note for future agents working in this repository.
 - Current visual direction is accepted as-is for now.
 - PWA support is included via a lightweight service worker.
 - Primary flows implemented: dashboard, plant detail, create/edit plant.
-- Plant model now aligns with the OpenAPI contract: `species`, `roomId`, action plans, and action history.
-- Dashboard last-watered state is derived from watering action data and action plans.
-- Backend integration uses generated OpenAPI clients in `src/generated/openapi` via `src/lib/backend.ts`; default dev API target is `/api` and Vite proxies that to `http://localhost:8081`.
-- Client talks to the contract endpoints for `/rooms`, `/action-types`, `/plants`, `/plants/{id}`, `/plants/{id}/actions`, and `/plants/{id}/action-plans`.
-- Regenerate the client with `npm run generate:api`.
-- Repository contains `openapi.yaml`; it currently describes the backend contract and uses `/api` as the server base path.
-- `openapi.yaml` is the source of truth for backend communication.
-- All backend communication must go through generated OpenAPI classes and models.
-- For local development, prefer the Vite `/api` proxy instead of browser-side cross-origin requests.
+- Plant data is now local-first and persisted in IndexedDB.
+- The app seeds local rooms, action types, plants, action plans, and action history on first load.
+- Dashboard is room-first; room pages list the plants in that room.
+- Dashboard last-watered state is derived from local watering action data and action plans.
+- There is no remote service dependency in the UI anymore.
 - Run path: `npm install`, `npm run dev`, `npm run build`.
 - Current scaffold build has been verified successfully.
-- Generated client lives under `src/generated/openapi`; do not hand-edit those files.
 
 ## Known goals
 
@@ -30,21 +25,17 @@ This file is the handoff note for future agents working in this repository.
 
 ## Open questions for the user
 
-I need the following decisions before I scaffold the app:
+I need the following decisions before I extend the app further:
 
-1. What is the backend contract?
-   - Existing API base URL
-   - Auth requirements
-   - Plant fields and endpoints
-   - Offline sync rules
-
-2. Do you already have:
+1. Do you already have:
    - Brand colors
    - Logo
    - Typography preferences
    - Reference apps/screens
 
-3. Should we add test/lint/format tooling next?
+2. Should we add test/lint/format tooling next?
+
+3. Do you want any local export/import or sync mechanism next?
 
 ## Working conventions
 
@@ -57,4 +48,4 @@ I need the following decisions before I scaffold the app:
 
 ## Next step
 
-Answer the questions above, and I’ll scaffold the project accordingly.
+Answer the questions above, and I’ll extend the local-first PWA accordingly.
