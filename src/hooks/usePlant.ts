@@ -2,14 +2,13 @@ import { useEffect, useState } from 'react';
 import type {
   ActionPlanCreateRequest,
   PlantActionCreateRequest,
-  PlantDetailRecord,
-  PlantCreateRequest,
+  PlantCreateRequest, PlantDetailViewModel,
   PlantUpdateRequest
 } from '../types';
-import { createActionPlan, deletePlant, getPlant, logAction, savePlant } from '../lib/localDb';
+import { createActionPlan, deletePlant, getPlant, logAction, createPlant,updatePlant} from '../lib/localDb';
 
 export function usePlant(id: number | undefined) {
-  const [plant, setPlant] = useState<PlantDetailRecord | undefined>();
+  const [plant, setPlant] = useState<PlantDetailViewModel | undefined>();
   const [loading, setLoading] = useState(true);
 
   const refresh = async () => {
@@ -38,7 +37,7 @@ export function usePlant(id: number | undefined) {
     loading,
     refresh,
     savePlant: async (draft: PlantCreateRequest | PlantUpdateRequest, existingId?: number) => {
-      const saved = await savePlant(draft, existingId);
+      const saved = existingId ? await updatePlant(draft, existingId) : await createPlant(draft);
       await refresh();
       return saved;
     },

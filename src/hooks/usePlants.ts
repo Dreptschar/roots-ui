@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-import type { PlantRecord, PlantViewModel } from '../types';
+import type {  PlantViewModel } from '../types';
 import { getActionTypes, getPlant, getPlants, getRooms } from '../lib/localDb';
+import {DEFAULT_ACTION_TYPES} from "../lib/defaultTypes";
+import {PlantRecord} from "../dbTypes";
 
 function deriveWateringState(
   plant: PlantRecord,
@@ -37,8 +39,6 @@ export function usePlants() {
     try {
       const [plantItems, rooms, actionTypes] = await Promise.all([getPlants(), getRooms(), getActionTypes()]);
       const roomNames = new Map(rooms.map((room) => [room.id, room.name]));
-      const wateringActionTypeId = actionTypes.find((actionType) => actionType.key === 'watering')?.id;
-
       const detailData = await Promise.all(
         plantItems.map(async (plant) => ({ plant, detail: await getPlant(plant.id) }))
       );
@@ -47,7 +47,7 @@ export function usePlants() {
           deriveWateringState(
             plant,
             roomNames,
-            wateringActionTypeId,
+            DEFAULT_ACTION_TYPES[0].id,
             detail?.actions ?? [],
             detail?.actionPlans ?? []
           )

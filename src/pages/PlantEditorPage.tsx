@@ -86,7 +86,13 @@ export function PlantEditorPage({ mode }: PlantEditorPageProps) {
             submitLabel={mode === 'create' ? 'Add plant' : 'Save changes'}
             onSubmit={async (draft) => {
               const saved = await savePlant(draft, plant?.id);
-              navigate(saved ? (mode === 'create' ? `/rooms/${saved.roomId}` : `/plants/${saved.id}`) : '/');
+              if (saved) {
+                if (mode === 'create') {
+                  navigate(-1);
+                } else {
+                  navigate(`/plants/${saved.id}`);
+                }
+              }
             }}
           />
         )}

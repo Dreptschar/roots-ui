@@ -15,7 +15,6 @@ export function DashboardPage() {
             Add plant
           </Link>
         </div>
-        {loading ? <p>Loading plants…</p> : null}
         <div className="grid">
           {plants.map((plant) => (
             <PlantCard key={plant.id} plant={plant} />

@@ -5,6 +5,7 @@ import { formatDate } from '../lib/date';
 import { useObjectUrl } from '../hooks/useObjectUrl';
 import { usePlant } from '../hooks/usePlant';
 import { useReferenceData } from '../hooks/useReferenceData';
+import {DEFAULT_ACTION_TYPES} from "../lib/defaultTypes";
 
 export function PlantDetailPage() {
   const { id } = useParams();
@@ -19,8 +20,6 @@ export function PlantDetailPage() {
   const [manualActionTypeId, setManualActionTypeId] = useState<number | undefined>();
   const [manualLogModalOpen, setManualLogModalOpen] = useState(false);
   const photoUrl = useObjectUrl(plant?.photoBlob);
-
-  const wateringActionTypeId = actionTypes.find((actionType) => actionType.key === 'watering')?.id;
 
   useEffect(() => {
     if (!planModalOpen && !manualLogModalOpen) return;
@@ -50,7 +49,7 @@ export function PlantDetailPage() {
     );
   }
 
-  const wateringPlan = plant.actionPlans?.find((plan) => plan.actionTypeId === wateringActionTypeId);
+  const wateringPlan = plant.actionPlans?.find((plan) => plan.actionTypeId === DEFAULT_ACTION_TYPES[0].id);
   const room = plant.room ?? rooms.find((item) => item.id === plant.roomId);
 
   return (
@@ -212,7 +211,6 @@ export function PlantDetailPage() {
                   await createActionPlan({
                     actionTypeId: planActionTypeId,
                     intervalDays: planIntervalDays,
-                    lastPerformedAt: wateringPlan?.lastPerformedAt,
                     active: true,
                     notes: planNotes
                   });

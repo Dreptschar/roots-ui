@@ -1,8 +1,9 @@
 import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
-import type { PlantCreateRequest, RoomRecord } from '../types';
+import type { PlantCreateRequest} from '../types';
 import { createRoom } from '../lib/localDb';
 import { useObjectUrl } from '../hooks/useObjectUrl';
+import {RoomRecord} from "../dbTypes";
 
 type PlantFormProps = {
   initialValues?: PlantCreateRequest;
