@@ -52,7 +52,6 @@ export function SettingsPage() {
             Add action
           </button>
         </div>
-        {loading ? <p>Loading actions…</p> : null}
         <div className="scheduleList">
           {actionTypes.map((actionType) => {
             const card = (

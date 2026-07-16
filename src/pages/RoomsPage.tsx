@@ -44,7 +44,6 @@ export function RoomsPage() {
             Add room
           </button>
         </div>
-        {loading ? <p>Loading rooms…</p> : null}
         <div className="roomGrid">
           {rooms.map((room) => {
             const plantCount = plants.filter((plant) => plant.roomId === room.id).length;
