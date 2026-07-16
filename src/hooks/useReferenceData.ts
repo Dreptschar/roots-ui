@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getActionTypes, getRooms } from '../lib/localDb';
-import {ActionTypeRecord, RoomRecord} from "../dbTypes";
+import { ActionTypeRecord, RoomRecord } from '../dbTypes';
 
 export function useReferenceData() {
   const [rooms, setRooms] = useState<RoomRecord[]>([]);

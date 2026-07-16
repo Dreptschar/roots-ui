@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react';
+import { type FormEvent, useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { PlantCard } from '../components/PlantCard';
@@ -17,10 +17,7 @@ export function RoomDetailPage() {
   const [saving, setSaving] = useState(false);
 
   const room = useMemo(() => rooms.find((item) => item.id === roomId), [rooms, roomId]);
-  const plantsInRoom = useMemo(
-    () => plants.filter((plant) => plant.roomId === roomId),
-    [plants, roomId]
-  );
+  const plantsInRoom = useMemo(() => plants.filter((plant) => plant.roomId === roomId), [plants, roomId]);
 
   useEffect(() => {
     if (!room) return;
@@ -97,7 +94,9 @@ export function RoomDetailPage() {
         <div className="roomSummary">
           <div className="roomSummaryTitle">
             <h2>{room.name}</h2>
-            <p>{plantsInRoom.length} plant{plantsInRoom.length === 1 ? '' : 's'}</p>
+            <p>
+              {plantsInRoom.length} plant{plantsInRoom.length === 1 ? '' : 's'}
+            </p>
           </div>
           <Link className="primaryButton" to={`/plants/new?roomId=${room.id}`}>
             Add plant

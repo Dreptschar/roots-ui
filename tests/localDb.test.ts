@@ -8,7 +8,6 @@ import {
   getPlant,
   getRooms,
   logAction,
-  savePlant
 } from '../src/lib/localDb';
 
 beforeEach(async () => {

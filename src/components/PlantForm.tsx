@@ -1,9 +1,9 @@
 import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
-import type { PlantCreateRequest} from '../types';
+import type { PlantCreateRequest } from '../types';
 import { createRoom } from '../lib/localDb';
 import { useObjectUrl } from '../hooks/useObjectUrl';
-import {RoomRecord} from "../dbTypes";
+import { RoomRecord } from '../dbTypes';
 
 type PlantFormProps = {
   initialValues?: PlantCreateRequest;
@@ -20,7 +20,7 @@ const emptyDraft: PlantCreateRequest = {
   name: '',
   species: '',
   roomId: 0,
-  notes: ''
+  notes: '',
 };
 
 const ADD_ROOM_VALUE = '__add_room__';
@@ -33,7 +33,7 @@ export function PlantForm({
   onDraftChange,
   onSubmit,
   onRoomCreated,
-  submitLabel
+  submitLabel,
 }: PlantFormProps) {
   const [internalDraft, setInternalDraft] = useState<PlantCreateRequest>(initialValues ?? emptyDraft);
   const [saving, setSaving] = useState(false);
@@ -79,7 +79,7 @@ export function PlantForm({
       await onSubmit({
         ...draft,
         roomId: draft.roomId,
-        photoFile
+        photoFile,
       });
     } finally {
       setSaving(false);
@@ -90,7 +90,11 @@ export function PlantForm({
     setRoomSaving(true);
     try {
       const room = await createRoom({ name: roomName });
-      setAvailableRooms((current) => [...current.filter((item) => item.id !== room.id), room].sort((left, right) => left.name.localeCompare(right.name)));
+      setAvailableRooms((current) =>
+        [...current.filter((item) => item.id !== room.id), room].sort((left, right) =>
+          left.name.localeCompare(right.name),
+        ),
+      );
       const nextDraft = { ...draft, roomId: room.id };
       setDraft(nextDraft);
       await onRoomCreated?.();
@@ -109,7 +113,11 @@ export function PlantForm({
       </label>
       <label>
         Species
-        <input value={draft.species} onChange={(event) => setDraft({ ...draft, species: event.target.value })} required />
+        <input
+          value={draft.species}
+          onChange={(event) => setDraft({ ...draft, species: event.target.value })}
+          required
+        />
       </label>
       <label>
         Room
@@ -138,19 +146,17 @@ export function PlantForm({
       </label>
       <label>
         Notes
-        <textarea value={draft.notes} onChange={(event) => setDraft({ ...draft, notes: event.target.value })} rows={5} />
+        <textarea
+          value={draft.notes}
+          onChange={(event) => setDraft({ ...draft, notes: event.target.value })}
+          rows={5}
+        />
       </label>
       <label>
         Plant photo
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)}
-        />
+        <input type="file" accept="image/*" onChange={(event) => setPhotoFile(event.target.files?.[0] ?? null)} />
       </label>
-      {photoPreviewUrl ? (
-        <img className="photoPreview" src={photoPreviewUrl} alt="Selected plant" />
-      ) : null}
+      {photoPreviewUrl ? <img className="photoPreview" src={photoPreviewUrl} alt="Selected plant" /> : null}
       <button className="primaryButton" type="submit" disabled={saving || !draft.roomId}>
         {saving ? 'Saving…' : submitLabel}
       </button>

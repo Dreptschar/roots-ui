@@ -1,7 +1,9 @@
-import { useEffect, useState, type FormEvent } from 'react';
+import { type FormEvent, useEffect, useState } from 'react';
 import { Layout } from '../components/Layout';
-import { createActionType } from '../lib/localDb';
+import { createActionType, deleteActionType } from '../lib/localDb';
 import { useReferenceData } from '../hooks/useReferenceData';
+import { SwipeableCard } from '../components/SwipeableCard';
+import { DEFAULT_ACTION_TYPES } from '../lib/defaultTypes';
 
 export function SettingsPage() {
   const { actionTypes, loading, refresh } = useReferenceData();
@@ -31,6 +33,16 @@ export function SettingsPage() {
     }
   }
 
+  async function handleDeleteActionType(id: number) {
+    setSaving(true);
+    try {
+      await deleteActionType(id);
+      await refresh();
+    } finally {
+      setSaving(false);
+    }
+  }
+
   return (
     <Layout title="Settings">
       <section className="panel stack">
@@ -42,11 +54,23 @@ export function SettingsPage() {
         </div>
         {loading ? <p>Loading actions…</p> : null}
         <div className="scheduleList">
-          {actionTypes.map((actionType) => (
-            <div key={actionType.id} className="scheduleCard">
-              <strong>{actionType.label}</strong>
-            </div>
-          ))}
+          {actionTypes.map((actionType) => {
+            const card = (
+              <div className="scheduleCard">
+                <strong>{actionType.label}</strong>
+              </div>
+            );
+
+            if (actionType.id === DEFAULT_ACTION_TYPES[0].id) {
+              return <div key={actionType.id}>{card}</div>;
+            }
+
+            return (
+              <SwipeableCard key={actionType.id} onDelete={() => handleDeleteActionType(actionType.id)}>
+                {card}
+              </SwipeableCard>
+            );
+          })}
         </div>
       </section>
 
@@ -68,7 +92,12 @@ export function SettingsPage() {
             <form className="form compactForm" onSubmit={handleCreateActionType}>
               <label>
                 Name
-                <input value={actionTypeLabel} onChange={(event) => setActionTypeLabel(event.target.value)} required autoFocus />
+                <input
+                  value={actionTypeLabel}
+                  onChange={(event) => setActionTypeLabel(event.target.value)}
+                  required
+                  autoFocus
+                />
               </label>
               <button className="primaryButton" type="submit" disabled={saving || !actionTypeLabel.trim()}>
                 {saving ? 'Saving…' : 'Add action'}

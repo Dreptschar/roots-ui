@@ -23,7 +23,13 @@ export function PlantCard({ plant, showRoom = true }: PlantCardProps) {
           <h2>{plant.name}</h2>
           <p>{plant.species}</p>
         </div>
-        {scheduleText ? <span className={scheduleText.startsWith('Overdue') || scheduleText === 'Due today' ? 'pill warning' : 'pill'}>{scheduleText}</span> : null}
+        {scheduleText ? (
+          <span
+            className={scheduleText.startsWith('Overdue') || scheduleText === 'Due today' ? 'pill warning' : 'pill'}
+          >
+            {scheduleText}
+          </span>
+        ) : null}
       </div>
       <dl className="meta">
         <div>

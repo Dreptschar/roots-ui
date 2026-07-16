@@ -2,12 +2,13 @@ import {
   ActionPlanCreateRequest,
   ActionTypeCreateRequest,
   PlantActionCreateRequest,
-  PlantCreateRequest, PlantDetailViewModel,
+  PlantCreateRequest,
+  PlantDetailViewModel,
   PlantUpdateRequest,
   RoomCreateRequest,
 } from '../types';
-import {DEFAULT_ACTION_TYPES} from "./defaultTypes";
-import {ActionPlanRecord, ActionTypeRecord, PlantActionRecord, PlantRecord, RoomRecord} from "../dbTypes";
+import { DEFAULT_ACTION_TYPES } from './defaultTypes';
+import { ActionPlanRecord, ActionTypeRecord, PlantActionRecord, PlantRecord, RoomRecord } from '../dbTypes';
 
 const DB_NAME = 'roots-ui';
 const DB_VERSION = 4;
@@ -57,12 +58,7 @@ function txComplete(transaction: IDBTransaction): Promise<void> {
   });
 }
 
-function ensureIndex(
-  store: IDBObjectStore,
-  indexName: string,
-  keyPath: string,
-  options?: IDBIndexParameters
-) {
+function ensureIndex(store: IDBObjectStore, indexName: string, keyPath: string, options?: IDBIndexParameters) {
   if (!store.indexNames.contains(indexName)) {
     store.createIndex(indexName, keyPath, options);
   }
@@ -79,19 +75,19 @@ async function openDatabase(): Promise<IDBDatabase> {
 
         const roomsStore = db.objectStoreNames.contains(ROOMS_STORE)
           ? transaction?.objectStore(ROOMS_STORE)
-          : db.createObjectStore(ROOMS_STORE, { keyPath: 'id',autoIncrement: true });
+          : db.createObjectStore(ROOMS_STORE, { keyPath: 'id', autoIncrement: true });
         const actionTypesStore = db.objectStoreNames.contains(ACTION_TYPES_STORE)
           ? transaction?.objectStore(ACTION_TYPES_STORE)
-          : db.createObjectStore(ACTION_TYPES_STORE, { keyPath: 'id',autoIncrement: true });
+          : db.createObjectStore(ACTION_TYPES_STORE, { keyPath: 'id', autoIncrement: true });
         const plantsStore = db.objectStoreNames.contains(PLANTS_STORE)
           ? transaction?.objectStore(PLANTS_STORE)
-          : db.createObjectStore(PLANTS_STORE, { keyPath: 'id',autoIncrement: true });
+          : db.createObjectStore(PLANTS_STORE, { keyPath: 'id', autoIncrement: true });
         const actionPlansStore = db.objectStoreNames.contains(ACTION_PLANS_STORE)
           ? transaction?.objectStore(ACTION_PLANS_STORE)
-          : db.createObjectStore(ACTION_PLANS_STORE, { keyPath: 'id',autoIncrement: true });
+          : db.createObjectStore(ACTION_PLANS_STORE, { keyPath: 'id', autoIncrement: true });
         const actionsStore = db.objectStoreNames.contains(ACTIONS_STORE)
           ? transaction?.objectStore(ACTIONS_STORE)
-          : db.createObjectStore(ACTIONS_STORE, { keyPath: 'id',autoIncrement: true });
+          : db.createObjectStore(ACTIONS_STORE, { keyPath: 'id', autoIncrement: true });
 
         if (!roomsStore || !actionTypesStore || !plantsStore || !actionPlansStore || !actionsStore) {
           throw new Error('Failed to initialize IndexedDB stores');
@@ -104,7 +100,6 @@ async function openDatabase(): Promise<IDBDatabase> {
         for (const actionType of DEFAULT_ACTION_TYPES) {
           actionTypesStore.add(actionType);
         }
-
       };
 
       openRequest.onsuccess = () => {
@@ -171,13 +166,13 @@ async function getActionPlansForPlant(db: IDBDatabase, plantId: number) {
 }
 
 async function getActionPlanForPlantAndActionType(db: IDBDatabase, plantId: number, actionTypeId: number) {
- const transaction = db.transaction(ACTION_PLANS_STORE, 'readonly');
- const store = transaction.objectStore(ACTION_PLANS_STORE);
- const index = store.index('plantId');
+  const transaction = db.transaction(ACTION_PLANS_STORE, 'readonly');
+  const store = transaction.objectStore(ACTION_PLANS_STORE);
+  const index = store.index('plantId');
 
- const plans = await request(index.getAll(plantId)) as ActionPlanRecord[];
- await txComplete(transaction);
- return  plans.find((plan) => plan.actionTypeId === actionTypeId);
+  const plans = (await request(index.getAll(plantId))) as ActionPlanRecord[];
+  await txComplete(transaction);
+  return plans.find((plan) => plan.actionTypeId === actionTypeId);
 }
 
 async function getActionsForPlant(db: IDBDatabase, plantId: number) {
@@ -193,13 +188,13 @@ function toDetail(
   plant: PlantRecord,
   room: RoomRecord | undefined,
   actionPlans: ActionPlanRecord[],
-  actions: PlantActionRecord[]
+  actions: PlantActionRecord[],
 ): PlantDetailViewModel {
   return {
     ...plant,
     room,
     actionPlans,
-    actions
+    actions,
   };
 }
 
@@ -218,15 +213,15 @@ export async function createRoom(draft: RoomCreateRequest) {
   const room: Omit<RoomRecord, 'id'> = {
     name,
     createdAt: timestamp,
-    updatedAt: timestamp
+    updatedAt: timestamp,
   };
 
   const id = await request(store.put(room));
   await txComplete(transaction);
   return {
     id: id as number,
-    ...room
-  }
+    ...room,
+  };
 }
 
 export async function updateRoom(roomId: number, draft: RoomCreateRequest) {
@@ -242,7 +237,7 @@ export async function updateRoom(roomId: number, draft: RoomCreateRequest) {
   const room: RoomRecord = {
     ...existing,
     name,
-    updatedAt: now()
+    updatedAt: now(),
   };
 
   await request(store.put(room));
@@ -263,24 +258,34 @@ export async function getActionTypes() {
   const actionTypes = await readAll<ActionTypeRecord>(db, ACTION_TYPES_STORE);
   return actionTypes.sort((left, right) => left.label.localeCompare(right.label));
 }
+export async function deleteActionType(id: number) {
+  const db = await openDatabase();
+  const transaction = db.transaction(ACTION_TYPES_STORE, 'readwrite');
+  const store = transaction.objectStore(ACTION_TYPES_STORE);
+  await request(store.delete(id));
+  await txComplete(transaction);
+}
 
 export async function createActionType(draft: ActionTypeCreateRequest) {
   const db = await openDatabase();
   const label = requireText(draft.label, 'Action type label');
-  const slug = label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const slug = label
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
   const transaction = db.transaction(ACTION_TYPES_STORE, 'readwrite');
   const store = transaction.objectStore(ACTION_TYPES_STORE);
-  const actionType: Omit< ActionTypeRecord, 'id' > = {
+  const actionType: Omit<ActionTypeRecord, 'id'> = {
     label,
-    icon: undefined
+    icon: undefined,
   };
 
   const id = await request(store.put(actionType));
   await txComplete(transaction);
   return {
     id: id as number,
-    ...actionType
+    ...actionType,
   };
 }
 
@@ -301,19 +306,17 @@ export async function getPlant(plantId: number) {
   const [room, actionPlans, actions] = await Promise.all([
     getRoomById(db, plant.roomId),
     getActionPlansForPlant(db, plantId),
-    getActionsForPlant(db, plantId)
+    getActionsForPlant(db, plantId),
   ]);
 
   return toDetail(plant, room, actionPlans, actions);
 }
 
 export async function createPlant(draft: PlantCreateRequest): Promise<PlantRecord> {
-  const db = await  openDatabase();
+  const db = await openDatabase();
   const timestamp = now();
   const name = requireText(draft.name, 'Plant name');
   const species = requireText(draft.species, 'Plant species');
-  // TODO do this via checks in the form
-
   const transaction = db.transaction(PLANTS_STORE, 'readwrite');
   const store = transaction.objectStore(PLANTS_STORE);
 
@@ -325,15 +328,15 @@ export async function createPlant(draft: PlantCreateRequest): Promise<PlantRecor
     photoBlob: draft.photoFile ?? undefined,
     createdAt: timestamp,
     updatedAt: timestamp,
-  }
+  };
 
   const id = await request(store.add(plant));
   await txComplete(transaction);
 
   return {
     id: id as number,
-    ...plant
-  }
+    ...plant,
+  };
 }
 
 export async function updatePlant(draft: PlantUpdateRequest, existingId: number) {
@@ -355,7 +358,7 @@ export async function updatePlant(draft: PlantUpdateRequest, existingId: number)
     notes: trimText(draft.notes),
     photoBlob: draft.photoFile ?? existing?.photoBlob,
     createdAt,
-    updatedAt: timestamp
+    updatedAt: timestamp,
   };
 
   const idKey = await request(store.put(plant));
@@ -379,19 +382,19 @@ export async function deletePlant(plantId: number) {
   await txComplete(transaction);
 }
 export async function updateActionPlan(plantId: number, draft: ActionPlanCreateRequest) {
-    const db = await openDatabase();
-    const existingPlans = await getActionPlansForPlant(db, plantId);
-    const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
-    const matchingPlan = existingPlans.find((plan) => plan.actionTypeId === draft.actionTypeId);
-    if (!matchingPlan) {
-        return createActionPlan(plantId, draft);
-    }
-    const timestamp = now();
-    const resolvedLastPerformedAt = matchingPlan.lastPerformedAt;
-    const resolvedNextDueAt = resolvedLastPerformedAt ? addDays(resolvedLastPerformedAt, draft.intervalDays) : undefined;
-    const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE], 'readwrite');
-    const plantsStore = transaction.objectStore(PLANTS_STORE);
-    const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
+  const db = await openDatabase();
+  const existingPlans = await getActionPlansForPlant(db, plantId);
+  const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
+  const matchingPlan = existingPlans.find((plan) => plan.actionTypeId === draft.actionTypeId);
+  if (!matchingPlan) {
+    return createActionPlan(plantId, draft);
+  }
+  const timestamp = now();
+  const resolvedLastPerformedAt = matchingPlan.lastPerformedAt;
+  const resolvedNextDueAt = resolvedLastPerformedAt ? addDays(resolvedLastPerformedAt, draft.intervalDays) : undefined;
+  const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE], 'readwrite');
+  const plantsStore = transaction.objectStore(PLANTS_STORE);
+  const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
 
   const record: ActionPlanRecord = {
     id: matchingPlan.id,
@@ -403,108 +406,108 @@ export async function updateActionPlan(plantId: number, draft: ActionPlanCreateR
     active: draft.active,
     notes: draft.notes?.trim() || undefined,
     createdAt: matchingPlan.createdAt ?? timestamp,
-    updatedAt: timestamp
+    updatedAt: timestamp,
   };
 
-    const id = await request(actionPlansStore.put(record));
+  const id = await request(actionPlansStore.put(record));
 
-    if (plant) {
-      await request(
-          plantsStore.put({
-            ...plant,
-            updatedAt: timestamp
-          })
-      );
-    }
-
-    await txComplete(transaction);
-    return record;
+  if (plant) {
+    await request(
+      plantsStore.put({
+        ...plant,
+        updatedAt: timestamp,
+      }),
+    );
   }
 
-  export async function createActionPlan(plantId: number, draft: ActionPlanCreateRequest): Promise<ActionPlanRecord> {
-    const db = await openDatabase();
-    const existingPlans = await getActionPlansForPlant(db, plantId);
-    const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
-    const matchingPlan = existingPlans.find((plan) => plan.actionTypeId === draft.actionTypeId);
-    if (matchingPlan) {
-      return updateActionPlan(matchingPlan.id, draft);
-    }
-    const timestamp = now();
-    const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE], 'readwrite');
-    const plantsStore = transaction.objectStore(PLANTS_STORE);
-    const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
+  await txComplete(transaction);
+  return record;
+}
 
-    const record: Omit<ActionPlanRecord, 'id'> = {
-      plantId,
-      actionTypeId: draft.actionTypeId,
-      intervalDays: draft.intervalDays,
-      active: draft.active,
-      notes: draft.notes?.trim() || undefined,
-      createdAt: timestamp,
-      updatedAt: timestamp
-    };
+export async function createActionPlan(plantId: number, draft: ActionPlanCreateRequest): Promise<ActionPlanRecord> {
+  const db = await openDatabase();
+  const existingPlans = await getActionPlansForPlant(db, plantId);
+  const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
+  const matchingPlan = existingPlans.find((plan) => plan.actionTypeId === draft.actionTypeId);
+  if (matchingPlan) {
+    return updateActionPlan(matchingPlan.id, draft);
+  }
+  const timestamp = now();
+  const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE], 'readwrite');
+  const plantsStore = transaction.objectStore(PLANTS_STORE);
+  const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
 
-    const id = await request(actionPlansStore.put(record));
+  const record: Omit<ActionPlanRecord, 'id'> = {
+    plantId,
+    actionTypeId: draft.actionTypeId,
+    intervalDays: draft.intervalDays,
+    active: draft.active,
+    notes: draft.notes?.trim() || undefined,
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
 
-    if (plant) {
-      await request(
-          plantsStore.put({
-            ...plant,
-            updatedAt: timestamp
-          })
-      );
-    }
+  const id = await request(actionPlansStore.put(record));
 
-    await txComplete(transaction);
-    return {
-      id: id as number,
-      ...record
-    };
+  if (plant) {
+    await request(
+      plantsStore.put({
+        ...plant,
+        updatedAt: timestamp,
+      }),
+    );
   }
 
-  export async function logAction(plantId: number, draft: PlantActionCreateRequest) {
-    const db = await openDatabase();
-    const existingActions = await getActionsForPlant(db, plantId);
-    const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
-    const plan = await getActionPlanForPlantAndActionType(db, plantId, draft.actionTypeId);
-    const timestamp = now();
+  await txComplete(transaction);
+  return {
+    id: id as number,
+    ...record,
+  };
+}
 
-    const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE, ACTIONS_STORE], 'readwrite');
-    const plantsStore = transaction.objectStore(PLANTS_STORE);
-    const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
-    const actionsStore = transaction.objectStore(ACTIONS_STORE);
+export async function logAction(plantId: number, draft: PlantActionCreateRequest) {
+  const db = await openDatabase();
+  const existingActions = await getActionsForPlant(db, plantId);
+  const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
+  const plan = await getActionPlanForPlantAndActionType(db, plantId, draft.actionTypeId);
+  const timestamp = now();
 
-    const action: Omit<PlantActionRecord, 'id'> = {
-      plantId: plantId,
-      actionTypeId: draft.actionTypeId,
-      actionPlanId: plan?.id,
-      performedAt: draft.performedAt,
+  const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE, ACTIONS_STORE], 'readwrite');
+  const plantsStore = transaction.objectStore(PLANTS_STORE);
+  const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
+  const actionsStore = transaction.objectStore(ACTIONS_STORE);
+
+  const action: Omit<PlantActionRecord, 'id'> = {
+    plantId: plantId,
+    actionTypeId: draft.actionTypeId,
+    actionPlanId: plan?.id,
+    performedAt: draft.performedAt,
+  };
+
+  const id = await request(actionsStore.put(action));
+
+  if (plan) {
+    const updatedPlan: ActionPlanRecord = {
+      ...plan,
+      lastPerformedAt: draft.performedAt,
+      nextDueAt: addDays(draft.performedAt, plan.intervalDays),
+      updatedAt: timestamp,
     };
-
-    const id = await request(actionsStore.put(action));
-
-    if (plan) {
-      const updatedPlan: ActionPlanRecord = {
-        ...plan,
-        lastPerformedAt: draft.performedAt,
-        nextDueAt: addDays(draft.performedAt, plan.intervalDays),
-        updatedAt: timestamp
-      };
-      await request(actionPlansStore.put(updatedPlan));
-    }
-
-    if (plant) {
-      await request(
-          plantsStore.put({
-            ...plant,
-            updatedAt: timestamp
-          })
-      );
-    }
-
-    await txComplete(transaction);
-    return {
-      id: id as number,
-      ...action
-    };
+    await request(actionPlansStore.put(updatedPlan));
   }
+
+  if (plant) {
+    await request(
+      plantsStore.put({
+        ...plant,
+        updatedAt: timestamp,
+      }),
+    );
+  }
+
+  await txComplete(transaction);
+  return {
+    id: id as number,
+    ...action,
+  };
+}

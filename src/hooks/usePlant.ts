@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react';
 import type {
   ActionPlanCreateRequest,
   PlantActionCreateRequest,
-  PlantCreateRequest, PlantDetailViewModel,
-  PlantUpdateRequest
+  PlantCreateRequest,
+  PlantDetailViewModel,
+  PlantUpdateRequest,
 } from '../types';
-import { createActionPlan, deletePlant, getPlant, logAction, createPlant,updatePlant} from '../lib/localDb';
+import { createActionPlan, createPlant, deletePlant, getPlant, logAction, updatePlant } from '../lib/localDb';
 
 export function usePlant(id: number | undefined) {
   const [plant, setPlant] = useState<PlantDetailViewModel | undefined>();
@@ -56,6 +57,6 @@ export function usePlant(id: number | undefined) {
       const saved = await logAction(id, draft);
       await refresh();
       return saved;
-    }
+    },
   };
 }

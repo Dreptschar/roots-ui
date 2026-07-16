@@ -47,6 +47,6 @@ export function formatDate(value: Date | string) {
   return new Intl.DateTimeFormat(undefined, {
     month: 'short',
     day: 'numeric',
-    year: 'numeric'
+    year: 'numeric',
   }).format(new Date(value));
 }

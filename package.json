@@ -11,11 +11,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "emoji-picker-react": "^4.19.1",
     "lucide-react": "^1.24.0",
+    "prop-types": "^15.8.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.3"
+    "react-router-dom": "^7.6.3",
+    "react-swipeable": "^7.0.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",
@@ -23,11 +24,13 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^24.0.14",
+    "@types/prop-types": "^15.7.15",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.5.0",
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^29.1.1",
+    "prettier": "^3.9.5",
     "typescript": "^5.8.3",
     "vite": "^7.0.4",
     "vitest": "^4.1.10"

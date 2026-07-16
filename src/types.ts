@@ -1,9 +1,8 @@
-import {ActionPlanRecord, PlantActionRecord, PlantRecord, RoomRecord} from "./dbTypes";
+import { ActionPlanRecord, PlantActionRecord, PlantRecord, RoomRecord } from './dbTypes';
 
 export type ActionTypeCreateRequest = {
   label: string;
 };
-
 
 export type PlantDetailViewModel = PlantRecord & {
   room?: RoomRecord;

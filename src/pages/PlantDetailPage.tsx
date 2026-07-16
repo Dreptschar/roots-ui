@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { formatDate } from '../lib/date';
 import { useObjectUrl } from '../hooks/useObjectUrl';
 import { usePlant } from '../hooks/usePlant';
 import { useReferenceData } from '../hooks/useReferenceData';
-import {DEFAULT_ACTION_TYPES} from "../lib/defaultTypes";
+import { DEFAULT_ACTION_TYPES } from '../lib/defaultTypes';
+import { SwipeableCard } from '../components/SwipeableCard';
 
 export function PlantDetailPage() {
   const { id } = useParams();
@@ -91,7 +92,11 @@ export function PlantDetailPage() {
         </div>
 
         <div className="detailPhoto">
-          {photoUrl ? <img src={photoUrl} alt={plant.name} /> : <div className="photoPlaceholder large">No photo yet</div>}
+          {photoUrl ? (
+            <img src={photoUrl} alt={plant.name} />
+          ) : (
+            <div className="photoPlaceholder large">No photo yet</div>
+          )}
         </div>
 
         <section>
@@ -106,13 +111,15 @@ export function PlantDetailPage() {
               plant.actionPlans.map((plan) => {
                 const actionType = actionTypes.find((item) => item.id === plan.actionTypeId);
                 return (
-                  <div key={plan.id} className="scheduleCard">
-                    <div className="compactRow">
-                      <strong>{actionType?.label ?? `Action ${plan.actionTypeId}`}</strong>
-                      <span>Every {plan.intervalDays} days</span>
+                  <SwipeableCard key={plan.id} onDelete={() => console.log('delete')}>
+                    <div key={plan.id} className="scheduleCard">
+                      <div className="compactRow">
+                        <strong>{actionType?.label ?? `Action ${plan.actionTypeId}`}</strong>
+                        <span>Every {plan.intervalDays} days</span>
+                      </div>
+                      <span>Last done {plan.lastPerformedAt ? formatDate(plan.lastPerformedAt) : 'Not set'}</span>
                     </div>
-                    <span>Last done {plan.lastPerformedAt ? formatDate(plan.lastPerformedAt) : 'Not set'}</span>
-                  </div>
+                  </SwipeableCard>
                 );
               })
             ) : (
@@ -159,11 +166,7 @@ export function PlantDetailPage() {
       </section>
 
       {planModalOpen ? (
-        <div
-          className="modalBackdrop"
-          role="presentation"
-          onClick={() => setPlanModalOpen(false)}
-        >
+        <div className="modalBackdrop" role="presentation" onClick={() => setPlanModalOpen(false)}>
           <section
             className="modalCard panel stack"
             role="dialog"
@@ -196,7 +199,12 @@ export function PlantDetailPage() {
               </label>
               <label>
                 Interval days
-                <input type="number" min={1} value={planIntervalDays} onChange={(event) => setPlanIntervalDays(Number(event.target.value))} />
+                <input
+                  type="number"
+                  min={1}
+                  value={planIntervalDays}
+                  onChange={(event) => setPlanIntervalDays(Number(event.target.value))}
+                />
               </label>
               <label>
                 Notes
@@ -212,7 +220,7 @@ export function PlantDetailPage() {
                     actionTypeId: planActionTypeId,
                     intervalDays: planIntervalDays,
                     active: true,
-                    notes: planNotes
+                    notes: planNotes,
                   });
                   setPlanNotes('');
                   setPlanModalOpen(false);
@@ -259,7 +267,9 @@ export function PlantDetailPage() {
                 Action
                 <select
                   value={manualActionTypeId ?? ''}
-                  onChange={(event) => setManualActionTypeId(event.target.value ? Number(event.target.value) : undefined)}
+                  onChange={(event) =>
+                    setManualActionTypeId(event.target.value ? Number(event.target.value) : undefined)
+                  }
                 >
                   <option value="" disabled>
                     Choose an action
@@ -279,7 +289,7 @@ export function PlantDetailPage() {
                   if (manualActionTypeId === undefined) return;
                   await logAction({
                     actionTypeId: manualActionTypeId,
-                    performedAt: new Date()
+                    performedAt: new Date(),
                   });
                   setManualLogModalOpen(false);
                   setManualActionTypeId(undefined);

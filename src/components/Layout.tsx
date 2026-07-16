@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import {HouseHeart, Settings, Sprout} from "lucide-react";
+import { HouseHeart, Settings, Sprout } from 'lucide-react';
 
 type LayoutProps = {
   title: string;
@@ -26,20 +26,19 @@ export function Layout({ title, subtitle, actions, children }: LayoutProps) {
       <nav className="bottomNav" aria-label="Primary">
         <NavLink to="/plants" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           <span className="navIcon" aria-hidden="true">
-          <Sprout></Sprout>
+            <Sprout></Sprout>
           </span>
           <span>Plants</span>
         </NavLink>
         <NavLink to="/rooms" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           <span className="navIcon" aria-hidden="true">
-            <HouseHeart>
-            </HouseHeart>
+            <HouseHeart></HouseHeart>
           </span>
           <span>Rooms</span>
         </NavLink>
         <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           <span className="navIcon" aria-hidden="true">
-            <Settings/>
+            <Settings />
           </span>
           <span>Settings</span>
         </NavLink>

@@ -1,326 +1,374 @@
 :root {
-  color-scheme: light;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #eef2ea;
-  color: #13241f;
-  line-height: 1.5;
-  font-weight: 400;
+    color-scheme: light;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #eef2ea;
+    color: #13241f;
+    line-height: 1.5;
+    font-weight: 400;
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 html,
 body,
 #root {
-  margin: 0;
-  min-height: 100%;
-  background: linear-gradient(180deg, #f8faf5 0%, #edf3ea 100%);
+    margin: 0;
+    min-height: 100%;
+    background: linear-gradient(180deg, #f8faf5 0%, #edf3ea 100%);
 }
 
 body {
-  min-height: 100vh;
+    min-height: 100vh;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 button,
 input,
 textarea {
-  font: inherit;
+    font: inherit;
 }
 
 select {
-  font: inherit;
+    font: inherit;
 }
 
 .shell {
-  width: min(100%, 960px);
-  margin: 0 auto;
-  padding: 16px 16px 96px;
+    width: min(100%, 960px);
+    margin: 0 auto;
+    padding: 16px 16px 96px;
 }
 
 .topbar {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 8px 0 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 8px 0 20px;
 }
 
 .topbarMain {
-  min-width: 0;
+    min-width: 0;
 }
 
 .topbarActions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .brand {
-  display: inline-flex;
-  margin-bottom: 8px;
-  color: #0d4a3d;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+    display: inline-flex;
+    margin-bottom: 8px;
+    color: #0d4a3d;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }
 
 .topbar h1 {
-  margin: 0;
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
+    margin: 0;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
 }
 
 .topbar p {
-  margin: 6px 0 0;
-  max-width: 54ch;
-  color: #4c645c;
+    margin: 6px 0 0;
+    max-width: 54ch;
+    color: #4c645c;
 }
 
 .content {
-  display: grid;
-  gap: 16px;
+    display: grid;
+    gap: 16px;
 }
 
 .panel,
 .card {
-  background: rgba(255, 255, 255, 0.84);
-  border: 1px solid rgba(16, 59, 49, 0.08);
-  border-radius: 24px;
-  box-shadow: 0 14px 40px rgba(12, 31, 23, 0.06);
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(16, 59, 49, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 14px 40px rgba(12, 31, 23, 0.06);
 }
 
 .panel {
-  padding: 18px;
+    padding: 18px;
 }
 
 .panelHeader,
 .cardHeader,
 .detailHero,
 .buttonRow {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
 }
 
 .panelHeader h2,
 .card h2 {
-  margin: 0;
+    margin: 0;
 }
 
 .panelHeader p,
 .card p {
-  margin: 4px 0 0;
-  color: #51665f;
+    margin: 4px 0 0;
+    color: #51665f;
 }
 
 .grid {
-  display: grid;
-  gap: 14px;
-  margin-top: 16px;
+    display: grid;
+    gap: 14px;
+    margin-top: 16px;
 }
 
 .roomGrid {
-  display: grid;
-  gap: 14px;
-  margin-top: 16px;
+    display: grid;
+    gap: 14px;
+    margin-top: 16px;
 }
 
 .card {
-  display: block;
-  padding: 16px;
+    display: block;
+    padding: 16px;
 }
 
 .cardMedia,
 .detailPhoto {
-  overflow: hidden;
-  border-radius: 18px;
-  background: #e7eee8;
-  border: 1px solid rgba(16, 59, 49, 0.08);
+    overflow: hidden;
+    border-radius: 18px;
+    background: #e7eee8;
+    border: 1px solid rgba(16, 59, 49, 0.08);
 }
 
 .cardMedia {
-  margin-bottom: 14px;
-  aspect-ratio: 16 / 10;
+    margin-bottom: 14px;
+    aspect-ratio: 16 / 10;
 }
 
 .cardMedia img,
 .detailPhoto img,
 .photoPreview {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .detailPhoto {
-  min-height: 220px;
+    min-height: 220px;
 }
 
 .photoPreview {
-  aspect-ratio: 16 / 10;
-  border-radius: 18px;
-  border: 1px solid rgba(16, 59, 49, 0.08);
-  background: #e7eee8;
+    aspect-ratio: 16 / 10;
+    border-radius: 18px;
+    border: 1px solid rgba(16, 59, 49, 0.08);
+    background: #e7eee8;
 }
 
 .photoPlaceholder {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  color: #6a7d76;
-  font-weight: 600;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    color: #6a7d76;
+    font-weight: 600;
 }
 
 .photoPlaceholder.large {
-  min-height: 220px;
+    min-height: 220px;
 }
 
 .roomCard {
-  display: grid;
-  gap: 16px;
+    display: grid;
+    gap: 16px;
 }
 
 .roomCardHeader {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  justify-content: space-between;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: space-between;
 }
 
 .roomCardHeader h2 {
-  margin: 0;
+    margin: 0;
 }
 
 .roomSummary {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  justify-content: space-between;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .roomSummaryTitle {
-  display: grid;
-  gap: 4px;
+    display: grid;
+    gap: 4px;
 }
 
 .roomSummary h2 {
-  margin: 0;
+    margin: 0;
 }
 
 .roomSummary p {
-  margin: 4px 0 0;
-  color: #5c726c;
+    margin: 4px 0 0;
+    color: #5c726c;
 }
 
 .meta {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin: 16px 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 16px 0 0;
 }
 
 .meta dt {
-  color: #6a7d76;
-  font-size: 0.82rem;
+    color: #6a7d76;
+    font-size: 0.82rem;
 }
 
 .meta dd {
-  margin: 4px 0 0;
-  font-weight: 600;
+    margin: 4px 0 0;
+    font-weight: 600;
 }
 
 .pill {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: #dff0e8;
-  color: #0c5b47;
-  font-size: 0.88rem;
-  font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #dff0e8;
+    color: #0c5b47;
+    font-size: 0.88rem;
+    font-weight: 700;
 }
 
 .pill.warning {
-  background: #fff0d7;
-  color: #8a5b00;
+    background: #fff0d7;
+    color: #8a5b00;
 }
 
 .primaryAction,
 .primaryButton,
 .secondaryButton,
 .dangerButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0 16px;
-  border-radius: 14px;
-  border: 1px solid transparent;
-  font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 16px;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    font-weight: 700;
 }
 
 .primaryAction,
 .primaryButton {
-  background: #103b31;
-  color: #fff;
+    background: #103b31;
+    color: #fff;
 }
 
 .secondaryButton {
-  background: #fff;
-  border-color: rgba(16, 59, 49, 0.12);
-  color: #103b31;
+    background: #fff;
+    border-color: rgba(16, 59, 49, 0.12);
+    color: #103b31;
 }
 
 .dangerButton {
-  background: #fff1ef;
-  color: #9b2c2c;
-  border-color: rgba(155, 44, 44, 0.12);
+    background: #fff1ef;
+    color: #9b2c2c;
+    border-color: rgba(155, 44, 44, 0.12);
 }
 
 .form {
-  display: grid;
-  gap: 14px;
+    display: grid;
+    gap: 14px;
 }
 
 .form label {
-  display: grid;
-  gap: 6px;
-  font-size: 0.95rem;
-  font-weight: 600;
+    display: grid;
+    gap: 6px;
+    font-size: 0.95rem;
+    font-weight: 600;
 }
 
 .form input,
 .form textarea,
 .form select {
-  width: 100%;
-  padding: 14px 16px;
-  border: 1px solid rgba(16, 59, 49, 0.12);
-  border-radius: 16px;
-  background: #fff;
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid rgba(16, 59, 49, 0.12);
+    border-radius: 16px;
+    background: #fff;
 }
 
 .formSection {
-  display: grid;
-  gap: 14px;
-  padding: 16px;
-  border-radius: 20px;
-  background: rgba(16, 59, 49, 0.03);
+    display: grid;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 20px;
+    background: rgba(16, 59, 49, 0.03);
+}
+
+.swipeRow {
+    position: relative;
+    overflow: hidden;
+    border-radius: 16px;
+
+    /* Helps prevent the browser treating horizontal swipes as navigation. */
+    touch-action: pan-y;
+}
+
+.swipeDeleteBackground {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-inline: 22px;
+    border-radius: inherit;
+    background: #c62828;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.swipeDeleteIcon {
+    font-size: 1.2rem;
+}
+
+.swipeRowContent {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    will-change: transform;
+    border-radius: inherit;
+    user-select: none;
+}
+
+.swipeRowContent .scheduleCard {
+    height: 100%;
+}
+
+/*
+ * Optional: collapse the empty space once the deletion animation finishes.
+ * The item will normally disappear immediately when React state updates.
+ */
+.swipeRowDeleting {
+    pointer-events: none;
 }
 
 .scheduleList {
-  display: grid;
-  gap: 12px;
+    display: grid;
+    gap: 12px;
 }
 
 .scheduleCard {
@@ -329,11 +377,11 @@ select {
   padding: 12px 14px;
   border-radius: 16px;
   border: 1px solid rgba(16, 59, 49, 0.08);
-  background: rgba(255, 255, 255, 0.8);
+    background: #fff;
 }
 
 .scheduleCard strong {
-  display: inline-block;
+    display: inline-block;
 }
 
 .scheduleCard span {
@@ -342,201 +390,201 @@ select {
 }
 
 .compactList {
-  gap: 8px;
+    gap: 8px;
 }
 
 .compactRow {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .compactRow p {
-  margin: 0;
+    margin: 0;
 }
 
 .compactButtons {
-  justify-content: flex-end;
+    justify-content: flex-end;
 }
 
 .compactButtons .secondaryButton {
-  min-height: 36px;
-  padding-inline: 12px;
-  border-radius: 12px;
+    min-height: 36px;
+    padding-inline: 12px;
+    border-radius: 12px;
 }
 
 .manualActionButton {
-  margin-top: 4px;
+    margin-top: 4px;
 }
 
 .compactForm {
-  padding-top: 4px;
+    padding-top: 4px;
 }
 
 .detailHero {
-  flex-wrap: wrap;
+    flex-wrap: wrap;
 }
 
 .detailTitleRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 12px;
 }
 
 .detailTitleRow h2 {
-  margin: 0;
+    margin: 0;
 }
 
 .detailSubtitle {
-  margin: 4px 0 0;
-  color: #51665f;
+    margin: 4px 0 0;
+    color: #51665f;
 }
 
 .inlineMeta {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-  padding: 0 10px;
-  border-radius: 999px;
-  background: #e6f1eb;
-  color: #2d5a4d;
-  font-size: 0.84rem;
-  font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: #e6f1eb;
+    color: #2d5a4d;
+    font-size: 0.84rem;
+    font-weight: 700;
 }
 
 .inlineMetaLink {
-  transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    transition: background-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .inlineMetaLink:hover,
 .inlineMetaLink:focus-visible {
-  background: #d7e8de;
-  color: #1d4e41;
-  transform: translateY(-1px);
+    background: #d7e8de;
+    color: #1d4e41;
+    transform: translateY(-1px);
 }
 
 .detailStats {
-  display: grid;
-  gap: 12px;
+    display: grid;
+    gap: 12px;
 }
 
 .detailStats strong,
 .detailStats span {
-  display: block;
+    display: block;
 }
 
 .detailStats strong {
-  font-size: 1rem;
+    font-size: 1rem;
 }
 
 .detailStats span {
-  color: #5c726c;
-  font-size: 0.85rem;
+    color: #5c726c;
+    font-size: 0.85rem;
 }
 
 .stack {
-  display: grid;
-  gap: 18px;
+    display: grid;
+    gap: 18px;
 }
 
 .detailPage {
-  gap: 14px;
+    gap: 14px;
 }
 
 .detailPage > section {
-  display: grid;
-  gap: 10px;
+    display: grid;
+    gap: 10px;
 }
 
 .sectionHeading {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .sectionHeading h3 {
-  margin: 0;
+    margin: 0;
 }
 
 .modalBackdrop {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: end center;
-  padding: 16px;
-  background: rgba(9, 20, 16, 0.45);
-  backdrop-filter: blur(8px);
-  z-index: 20;
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: end center;
+    padding: 16px;
+    background: rgba(9, 20, 16, 0.45);
+    backdrop-filter: blur(8px);
+    z-index: 20;
 }
 
 .modalCard {
-  width: min(100%, 560px);
-  max-height: min(88vh, 760px);
-  overflow: auto;
+    width: min(100%, 560px);
+    max-height: min(88vh, 760px);
+    overflow: auto;
 }
 
 .bottomNav {
-  position: fixed;
-  left: 50%;
-  bottom: 12px;
-  transform: translateX(-50%);
-  width: min(100% - 24px, 520px);
-  padding: 8px;
-  display: flex;
-  justify-content: space-around;
-  gap: 8px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(16, 59, 49, 0.08);
-  backdrop-filter: blur(20px);
+    position: fixed;
+    left: 50%;
+    bottom: 12px;
+    transform: translateX(-50%);
+    width: min(100% - 24px, 520px);
+    padding: 8px;
+    display: flex;
+    justify-content: space-around;
+    gap: 8px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(16, 59, 49, 0.08);
+    backdrop-filter: blur(20px);
 }
 
 .bottomNav a {
-  flex: 1;
-  min-width: 0;
-  padding: 8px 10px;
-  border-radius: 12px;
-  color: #38564d;
-  display: grid;
-  justify-items: center;
-  gap: 4px;
-  font-size: 0.82rem;
-  font-weight: 600;
+    flex: 1;
+    min-width: 0;
+    padding: 8px 10px;
+    border-radius: 12px;
+    color: #38564d;
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    font-size: 0.82rem;
+    font-weight: 600;
 }
 
 .bottomNav a.active {
-  background: #e6f1eb;
-  color: #103b31;
-  font-weight: 700;
+    background: #e6f1eb;
+    color: #103b31;
+    font-weight: 700;
 }
 
 .navIcon {
-  width: 22px;
-  height: 22px;
+    width: 22px;
+    height: 22px;
 }
 
 .navIcon svg {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 @media (min-width: 720px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-  .roomGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+    .roomGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-  .detailHero {
-    align-items: center;
-  }
+    .detailHero {
+        align-items: center;
+    }
 
-  .modalBackdrop {
-    place-items: center;
-  }
+    .modalBackdrop {
+        place-items: center;
+    }
 }

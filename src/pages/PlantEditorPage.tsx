@@ -15,7 +15,7 @@ export function PlantEditorPage({ mode }: PlantEditorPageProps) {
     name: '',
     species: '',
     roomId: 0,
-    notes: ''
+    notes: '',
   };
   const { id } = useParams();
   const [searchParams] = useSearchParams();
@@ -46,7 +46,7 @@ export function PlantEditorPage({ mode }: PlantEditorPageProps) {
         name: '',
         species: '',
         roomId: defaultRoomId ?? 0,
-        notes: ''
+        notes: '',
       };
     });
   }, [mode, defaultRoomId]);
@@ -64,7 +64,7 @@ export function PlantEditorPage({ mode }: PlantEditorPageProps) {
           name: plant.name,
           species: plant.species,
           roomId: plant.roomId,
-          notes: plant.notes
+          notes: plant.notes,
         }
       : undefined;
 
