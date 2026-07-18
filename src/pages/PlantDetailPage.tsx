@@ -12,7 +12,8 @@ export function PlantDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const plantId = id ? Number(id) : undefined;
-  const { plant, loading, removePlant, createActionPlan, logAction } = usePlant(plantId);
+  const { plant, loading, removePlant, createActionPlan, logAction, deleteActionPlan, deleteLoggedAction } =
+    usePlant(plantId);
   const { rooms, actionTypes, loading: referenceLoading } = useReferenceData();
   const [planActionTypeId, setPlanActionTypeId] = useState<number | undefined>();
   const [planIntervalDays, setPlanIntervalDays] = useState(7);
@@ -111,7 +112,7 @@ export function PlantDetailPage() {
               plant.actionPlans.map((plan) => {
                 const actionType = actionTypes.find((item) => item.id === plan.actionTypeId);
                 return (
-                  <SwipeableCard key={plan.id} onDelete={() => console.log('delete')}>
+                  <SwipeableCard key={plan.id} onDelete={async () => await deleteActionPlan(plan.id, plant.id)}>
                     <div key={plan.id} className="scheduleCard">
                       <div className="compactRow">
                         <strong>{actionType?.label ?? `Action ${plan.actionTypeId}`}</strong>
@@ -145,12 +146,17 @@ export function PlantDetailPage() {
               plant.actions.map((entry) => {
                 const actionType = actionTypes.find((item) => item.id === entry.actionTypeId);
                 return (
-                  <div key={entry.id} className="scheduleCard">
-                    <div className="compactRow">
-                      <strong>{actionType?.label ?? `Action ${entry.actionTypeId}`}</strong>
-                      <span>{formatDate(entry.performedAt)}</span>
+                  <SwipeableCard
+                    key={entry.id}
+                    onDelete={async () => await deleteLoggedAction(plant.id, entry.id, entry.actionPlanId)}
+                  >
+                    <div key={entry.id} className="scheduleCard">
+                      <div className="compactRow">
+                        <strong>{actionType?.label ?? `Action ${entry.actionTypeId}`}</strong>
+                        <span>{formatDate(entry.performedAt)}</span>
+                      </div>
                     </div>
-                  </div>
+                  </SwipeableCard>
                 );
               })
             ) : (

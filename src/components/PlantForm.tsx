@@ -113,11 +113,7 @@ export function PlantForm({
       </label>
       <label>
         Species
-        <input
-          value={draft.species}
-          onChange={(event) => setDraft({ ...draft, species: event.target.value })}
-          required
-        />
+        <input value={draft.species} onChange={(event) => setDraft({ ...draft, species: event.target.value })} />
       </label>
       <label>
         Room

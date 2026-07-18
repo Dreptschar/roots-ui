@@ -21,7 +21,7 @@ function deriveWateringState(
     wateringPlan?.nextDueAt ??
     (lastWateredAt && wateringPlan
       ? new Date(lastWateredAt.getTime() + wateringPlan.intervalDays * 86400000)
-      : new Date());
+      : undefined);
 
   return {
     ...plant,

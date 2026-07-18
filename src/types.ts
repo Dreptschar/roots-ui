@@ -12,7 +12,7 @@ export type PlantDetailViewModel = PlantRecord & {
 
 export type PlantCreateRequest = {
   name: string;
-  species: string;
+  species?: string;
   roomId: number;
   notes: string;
   photoFile?: File | null;

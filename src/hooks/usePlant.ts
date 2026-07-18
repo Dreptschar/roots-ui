@@ -6,7 +6,16 @@ import type {
   PlantDetailViewModel,
   PlantUpdateRequest,
 } from '../types';
-import { createActionPlan, createPlant, deletePlant, getPlant, logAction, updatePlant } from '../lib/localDb';
+import {
+  createActionPlan,
+  createPlant,
+  deleteActionPlan,
+  deleteLoggedAction,
+  deletePlant,
+  getPlant,
+  logAction,
+  updatePlant,
+} from '../lib/localDb';
 
 export function usePlant(id: number | undefined) {
   const [plant, setPlant] = useState<PlantDetailViewModel | undefined>();
@@ -46,6 +55,12 @@ export function usePlant(id: number | undefined) {
       if (id === undefined) return;
       await deletePlant(id);
     },
+    deleteActionPlan: async (actionPlanId: number, plantId: number) => {
+      if (id === undefined) return;
+      await deleteActionPlan(actionPlanId, plantId);
+      await refresh();
+      return;
+    },
     createActionPlan: async (draft: ActionPlanCreateRequest) => {
       if (id === undefined) return;
       const saved = await createActionPlan(id, draft);
@@ -57,6 +72,12 @@ export function usePlant(id: number | undefined) {
       const saved = await logAction(id, draft);
       await refresh();
       return saved;
+    },
+    deleteLoggedAction: async (plantId: number, plantActionId: number, actionPlanId?: number) => {
+      if (id === undefined) return;
+      await deleteLoggedAction(plantId, plantActionId, actionPlanId);
+      await refresh();
+      return;
     },
   };
 }

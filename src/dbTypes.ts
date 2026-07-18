@@ -14,7 +14,7 @@ export type ActionTypeRecord = {
 export type PlantRecord = {
   id: number;
   name: string;
-  species: string;
+  species?: string;
   roomId: number;
   notes: string;
   photoBlob?: Blob;

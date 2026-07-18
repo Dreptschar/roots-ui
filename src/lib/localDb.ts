@@ -46,7 +46,9 @@ function addDays(value: Date, days: number) {
 function request<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     request.onsuccess = () => resolve(request.result);
-    request.onerror = () => reject(request.error ?? new Error('IndexedDB request failed'));
+    request.onerror = () => {
+      reject(request.error ?? new Error('IndexedDB request failed'));
+    };
   });
 }
 
@@ -96,6 +98,7 @@ async function openDatabase(): Promise<IDBDatabase> {
         ensureIndex(actionPlansStore, 'plantId', 'plantId', { unique: false });
         ensureIndex(actionsStore, 'plantId', 'plantId', { unique: false });
         ensureIndex(actionsStore, 'performedAt', 'performedAt', { unique: false });
+        ensureIndex(actionsStore, 'actionPlanId', 'actionPlanId', { unique: false });
 
         for (const actionType of DEFAULT_ACTION_TYPES) {
           actionTypesStore.add(actionType);
@@ -316,7 +319,7 @@ export async function createPlant(draft: PlantCreateRequest): Promise<PlantRecor
   const db = await openDatabase();
   const timestamp = now();
   const name = requireText(draft.name, 'Plant name');
-  const species = requireText(draft.species, 'Plant species');
+  const species = draft.species;
   const transaction = db.transaction(PLANTS_STORE, 'readwrite');
   const store = transaction.objectStore(PLANTS_STORE);
 
@@ -346,7 +349,7 @@ export async function updatePlant(draft: PlantUpdateRequest, existingId: number)
   const timestamp = now();
   const createdAt = existing?.createdAt ?? timestamp;
   const name = requireText(draft.name, 'Plant name');
-  const species = requireText(draft.species, 'Plant species');
+  const species = draft.species;
 
   const transaction = db.transaction(PLANTS_STORE, 'readwrite');
   const store = transaction.objectStore(PLANTS_STORE);
@@ -465,9 +468,28 @@ export async function createActionPlan(plantId: number, draft: ActionPlanCreateR
   };
 }
 
+export async function deleteActionPlan(actionPlanId: number, plantId: number) {
+  const db = await openDatabase();
+  const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
+  const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE], 'readwrite');
+  const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
+  const plantsStore = transaction.objectStore(PLANTS_STORE);
+  const timestamp = now();
+
+  await request(actionPlansStore.delete(actionPlanId));
+  if (plant) {
+    await request(
+      plantsStore.put({
+        ...plant,
+        updatedAt: timestamp,
+      }),
+    );
+  }
+  await txComplete(transaction);
+}
+
 export async function logAction(plantId: number, draft: PlantActionCreateRequest) {
   const db = await openDatabase();
-  const existingActions = await getActionsForPlant(db, plantId);
   const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
   const plan = await getActionPlanForPlantAndActionType(db, plantId, draft.actionTypeId);
   const timestamp = now();
@@ -510,4 +532,53 @@ export async function logAction(plantId: number, draft: PlantActionCreateRequest
     id: id as number,
     ...action,
   };
+}
+export async function deleteLoggedAction(plantId: number, plantActionId: number, actionPlanId?: number): Promise<void> {
+  const db = await openDatabase();
+
+  const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
+
+  const actionPlan = actionPlanId ? await readOne<ActionPlanRecord>(db, ACTION_PLANS_STORE, actionPlanId) : undefined;
+
+  const timestamp = now();
+
+  const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE, ACTIONS_STORE], 'readwrite');
+
+  const plantsStore = transaction.objectStore(PLANTS_STORE);
+  const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
+  const actionsStore = transaction.objectStore(ACTIONS_STORE);
+
+  await request(actionsStore.delete(plantActionId));
+
+  let newestAction: PlantActionRecord | undefined;
+
+  if (actionPlanId !== undefined) {
+    const actions = (await request(actionsStore.index('actionPlanId').getAll(actionPlanId))) as PlantActionRecord[];
+
+    newestAction = actions.sort((a, b) => b.performedAt.getTime() - a.performedAt.getTime())[0];
+  }
+
+  if (actionPlan) {
+    const lastPerformedAt = newestAction?.performedAt;
+
+    const updatedPlan: ActionPlanRecord = {
+      ...actionPlan,
+      lastPerformedAt,
+      nextDueAt: lastPerformedAt ? addDays(lastPerformedAt, actionPlan.intervalDays) : undefined,
+      updatedAt: timestamp,
+    };
+
+    await request(actionPlansStore.put(updatedPlan));
+  }
+
+  if (plant) {
+    await request(
+      plantsStore.put({
+        ...plant,
+        updatedAt: timestamp,
+      }),
+    );
+  }
+
+  await txComplete(transaction);
 }
