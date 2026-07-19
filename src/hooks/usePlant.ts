@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   ActionPlanCreateRequest,
   PlantActionCreateRequest,
@@ -21,35 +21,64 @@ export function usePlant(id: number | undefined) {
   const [plant, setPlant] = useState<PlantDetailViewModel | undefined>();
   const [loading, setLoading] = useState(true);
 
-  const refresh = async () => {
-    if (id === undefined) return;
-    setLoading(true);
-    try {
-      setPlant(await getPlant(id));
-    } catch {
-      setPlant(undefined);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const refreshVersion = useRef(0);
 
-  useEffect(() => {
+  const refresh = useCallback(async () => {
     if (id === undefined) {
       setPlant(undefined);
       setLoading(false);
-      return;
+      return undefined;
     }
-    void refresh();
+
+    const currentVersion = ++refreshVersion.current;
+
+    setLoading(true);
+
+    try {
+      const refreshedPlant = await getPlant(id);
+
+      // Another refresh started while this one was running.
+      // Do not let the older result overwrite the newer one.
+      if (currentVersion !== refreshVersion.current) {
+        return refreshedPlant;
+      }
+
+      setPlant(refreshedPlant);
+      return refreshedPlant;
+    } catch (error) {
+      console.error(`Failed to load plant ${id}`, error);
+
+      // Keep the currently displayed plant instead of removing its photo.
+      return undefined;
+    } finally {
+      if (currentVersion === refreshVersion.current) {
+        setLoading(false);
+      }
+    }
   }, [id]);
+
+  useEffect(() => {
+    void refresh();
+
+    return () => {
+      // Invalidates a running refresh when the component unmounts
+      // or when the plant ID changes.
+      refreshVersion.current += 1;
+    };
+  }, [refresh]);
 
   return {
     plant,
     loading,
     refresh,
     savePlant: async (draft: PlantCreateRequest | PlantUpdateRequest, existingId?: number) => {
-      const saved = existingId ? await updatePlant(draft, existingId) : await createPlant(draft);
-      await refresh();
-      return saved;
+      if (existingId !== undefined) {
+        const saved = await updatePlant(draft, existingId);
+        await refresh();
+        return saved;
+      }
+
+      return createPlant(draft);
     },
     removePlant: async () => {
       if (id === undefined) return;

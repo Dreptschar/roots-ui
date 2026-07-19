@@ -342,33 +342,38 @@ export async function createPlant(draft: PlantCreateRequest): Promise<PlantRecor
   };
 }
 
-export async function updatePlant(draft: PlantUpdateRequest, existingId: number) {
+export async function updatePlant(draft: PlantUpdateRequest, existingId: number): Promise<PlantRecord> {
   const db = await openDatabase();
-  const currentPlants = await readAll<PlantRecord>(db, PLANTS_STORE);
-  const existing = existingId !== undefined ? await readOne<PlantRecord>(db, PLANTS_STORE, existingId) : undefined;
-  const timestamp = now();
-  const createdAt = existing?.createdAt ?? timestamp;
-  const name = requireText(draft.name, 'Plant name');
-  const species = draft.species;
 
-  const transaction = db.transaction(PLANTS_STORE, 'readwrite');
-  const store = transaction.objectStore(PLANTS_STORE);
+  const existing = await readOne<PlantRecord>(db, PLANTS_STORE, existingId);
+
+  if (!existing) {
+    throw new Error(`Plant ${existingId} was not found`);
+  }
+
   const plant: PlantRecord = {
-    id: existingId,
-    name,
-    species,
+    ...existing,
+    name: requireText(draft.name, 'Plant name'),
+    species: draft.species,
     roomId: draft.roomId,
     notes: trimText(draft.notes),
-    photoBlob: draft.photoFile ?? existing?.photoBlob,
-    createdAt,
-    updatedAt: timestamp,
+
+    // Use the new photo when one was selected.
+    // Otherwise preserve the existing Blob.
+    photoBlob: draft.photoFile ?? existing.photoBlob,
+
+    updatedAt: now(),
   };
 
-  const idKey = await request(store.put(plant));
+  const transaction = db.transaction(PLANTS_STORE, 'readwrite');
+
+  const store = transaction.objectStore(PLANTS_STORE);
+
+  await request(store.put(plant));
   await txComplete(transaction);
+
   return plant;
 }
-
 export async function deletePlant(plantId: number) {
   const db = await openDatabase();
   const [plans, actions] = await Promise.all([getActionPlansForPlant(db, plantId), getActionsForPlant(db, plantId)]);

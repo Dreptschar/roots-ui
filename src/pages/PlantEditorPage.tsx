@@ -58,15 +58,18 @@ export function PlantEditorPage({ mode }: PlantEditorPageProps) {
     setCreateDraft((current) => (current && current.roomId === 0 ? { ...current, roomId: defaultRoomId } : current));
   }, [mode, createDraft.roomId, defaultRoomId]);
 
-  const initialValues: PlantCreateRequest | undefined =
-    mode === 'edit' && plant
-      ? {
-          name: plant.name,
-          species: plant.species,
-          roomId: plant.roomId,
-          notes: plant.notes,
-        }
-      : undefined;
+  const initialValues = useMemo<PlantCreateRequest | undefined>(() => {
+    if (mode !== 'edit' || !plant) {
+      return undefined;
+    }
+
+    return {
+      name: plant.name,
+      species: plant.species,
+      roomId: plant.roomId,
+      notes: plant.notes,
+    };
+  }, [mode, plant?.id, plant?.name, plant?.species, plant?.roomId, plant?.notes]);
 
   return (
     <Layout title={mode === 'create' ? 'Add plant' : 'Edit plant'}>
