@@ -16,7 +16,7 @@ describe('SettingsPage', () => {
     render(
       <MemoryRouter>
         <SettingsPage />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await user.click(await screen.findByRole('button', { name: /add action/i }));

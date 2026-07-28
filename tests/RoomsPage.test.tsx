@@ -16,7 +16,7 @@ describe('RoomsPage', () => {
     render(
       <MemoryRouter>
         <RoomsPage />
-      </MemoryRouter>
+      </MemoryRouter>,
     );
 
     await user.click(await screen.findByRole('button', { name: /add room/i }));

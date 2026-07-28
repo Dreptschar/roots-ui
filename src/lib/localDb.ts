@@ -438,7 +438,7 @@ export async function createActionPlan(plantId: number, draft: ActionPlanCreateR
   const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
   const matchingPlan = existingPlans.find((plan) => plan.actionTypeId === draft.actionTypeId);
   if (matchingPlan) {
-    return updateActionPlan(matchingPlan.id, draft);
+    return updateActionPlan(plantId, draft);
   }
   const timestamp = now();
   const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE], 'readwrite');

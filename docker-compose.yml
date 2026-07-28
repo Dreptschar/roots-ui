@@ -6,4 +6,4 @@ services:
     container_name: roots-ui
     restart: unless-stopped
     ports:
-      - "8081:80"
+      - '8081:80'
