@@ -1,48 +1,105 @@
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { formatDaysPast, formatUpcomingSchedule } from '../lib/date';
-import type { PlantViewModel } from '../types';
+import { formatDaysPast, formatUpcomingSchedule, isSameLocalDay } from '../lib/date';
+import type { LogActionResult, PlantViewModel } from '../types';
 import { useObjectUrl } from '../hooks/useObjectUrl';
+import { WATERING_EMOJI } from '../lib/defaultTypes';
 
 type PlantCardProps = {
   plant: PlantViewModel;
   showRoom?: boolean;
+  onWater: (plantId: number) => Promise<LogActionResult>;
 };
 
-export function PlantCard({ plant, showRoom = true }: PlantCardProps) {
+export function PlantCard({ plant, showRoom = true, onWater }: PlantCardProps) {
   const photoUrl = useObjectUrl(plant.photoBlob);
+  const feedbackTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const [waterStatus, setWaterStatus] = useState<'idle' | 'saving' | 'watered' | 'error'>('idle');
   const scheduleText = plant.nextWateringDueAt ? formatUpcomingSchedule(plant.nextWateringDueAt) : undefined;
   const wateredText = plant.lastWateredAt ? formatDaysPast(plant.lastWateredAt) : 'No watering logged';
+  const wateredToday = plant.lastWateredAt ? isSameLocalDay(plant.lastWateredAt) : false;
+
+  useEffect(
+    () => () => {
+      if (feedbackTimeout.current) {
+        clearTimeout(feedbackTimeout.current);
+      }
+    },
+    [],
+  );
+
+  async function handleWater() {
+    setWaterStatus('saving');
+    try {
+      await onWater(plant.id);
+      setWaterStatus('watered');
+      feedbackTimeout.current = setTimeout(() => setWaterStatus('idle'), 2000);
+    } catch {
+      setWaterStatus('error');
+    }
+  }
 
   return (
-    <Link to={`/plants/${plant.id}`} className="card">
-      <div className="cardMedia">
-        {photoUrl ? <img src={photoUrl} alt="" /> : <div className="photoPlaceholder">No photo</div>}
-      </div>
-      <div className="cardHeader">
-        <div>
-          <h2>{plant.name}</h2>
-          <p>{plant.species}</p>
+    <article className="card plantCard">
+      <Link to={`/plants/${plant.id}`} className="plantCardLink">
+        <div className="cardMedia">
+          {photoUrl ? <img src={photoUrl} alt="" /> : <div className="photoPlaceholder">No photo</div>}
         </div>
-        {scheduleText ? (
-          <span
-            className={scheduleText.startsWith('Overdue') || scheduleText === 'Due today' ? 'pill warning' : 'pill'}
-          >
-            {scheduleText}
-          </span>
-        ) : null}
-      </div>
-      <dl className="meta">
-        <div>
-          <dt>Last watered</dt>
-          <dd>{wateredText}</dd>
-        </div>
-        {showRoom ? (
+        <div className="cardHeader">
           <div>
-            <dt>Room</dt>
-            <dd>{plant.roomName ?? `Room #${plant.roomId}`}</dd>
+            <h2>{plant.name}</h2>
+            <p>{plant.species}</p>
           </div>
-        ) : null}
-      </dl>
-    </Link>
+          {scheduleText ? (
+            <span
+              className={scheduleText.startsWith('Overdue') || scheduleText === 'Due today' ? 'pill warning' : 'pill'}
+            >
+              {scheduleText}
+            </span>
+          ) : null}
+        </div>
+      </Link>
+      <div className="plantCardFooter">
+        <dl className="meta">
+          <div>
+            <dt>Last watered</dt>
+            <dd>{wateredText}</dd>
+          </div>
+          {showRoom ? (
+            <div>
+              <dt>Room</dt>
+              <dd>{plant.roomName ?? `Room #${plant.roomId}`}</dd>
+            </div>
+          ) : null}
+        </dl>
+        <button
+          className={`waterButton${waterStatus === 'watered' || wateredToday ? ' watered' : ''}`}
+          type="button"
+          disabled={waterStatus === 'saving' || wateredToday}
+          aria-label={wateredToday ? `${plant.name} watered today` : `Water ${plant.name}`}
+          onClick={() => void handleWater()}
+        >
+          <span className="waterButtonEmoji" aria-hidden="true">
+            {WATERING_EMOJI}
+          </span>
+          <span>
+            {waterStatus === 'saving'
+              ? 'Watering…'
+              : waterStatus === 'watered' || wateredToday
+                ? 'Watered today'
+                : waterStatus === 'error'
+                  ? 'Try again'
+                  : 'Water'}
+          </span>
+        </button>
+      </div>
+      <span className="srOnly" aria-live="polite">
+        {waterStatus === 'watered'
+          ? `${plant.name} watered`
+          : waterStatus === 'error'
+            ? `Could not water ${plant.name}`
+            : ''}
+      </span>
+    </article>
   );
 }

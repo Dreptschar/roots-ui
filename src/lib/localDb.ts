@@ -5,19 +5,22 @@ import {
   PlantCreateRequest,
   PlantDetailViewModel,
   PlantUpdateRequest,
+  LogActionResult,
   RoomCreateRequest,
 } from '../types';
 import { DEFAULT_ACTION_TYPES } from './defaultTypes';
 import { ActionPlanRecord, ActionTypeRecord, PlantActionRecord, PlantRecord, RoomRecord } from '../dbTypes';
+import { localDateKey } from './date';
 
 const DB_NAME = 'roots-ui';
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 
 const ROOMS_STORE = 'rooms';
 const ACTION_TYPES_STORE = 'actionTypes';
 const PLANTS_STORE = 'plants';
 const ACTION_PLANS_STORE = 'actionPlans';
 const ACTIONS_STORE = 'actions';
+const ACTION_DAY_INDEX = 'plantActionDay';
 
 let dbPromise: Promise<IDBDatabase> | undefined;
 
@@ -60,7 +63,12 @@ function txComplete(transaction: IDBTransaction): Promise<void> {
   });
 }
 
-function ensureIndex(store: IDBObjectStore, indexName: string, keyPath: string, options?: IDBIndexParameters) {
+function ensureIndex(
+  store: IDBObjectStore,
+  indexName: string,
+  keyPath: string | string[],
+  options?: IDBIndexParameters,
+) {
   if (!store.indexNames.contains(indexName)) {
     store.createIndex(indexName, keyPath, options);
   }
@@ -71,7 +79,7 @@ async function openDatabase(): Promise<IDBDatabase> {
     dbPromise = new Promise<IDBDatabase>((resolve, reject) => {
       const openRequest = indexedDB.open(DB_NAME, DB_VERSION);
 
-      openRequest.onupgradeneeded = () => {
+      openRequest.onupgradeneeded = (event) => {
         const db = openRequest.result;
         const transaction = openRequest.transaction;
 
@@ -99,9 +107,38 @@ async function openDatabase(): Promise<IDBDatabase> {
         ensureIndex(actionsStore, 'plantId', 'plantId', { unique: false });
         ensureIndex(actionsStore, 'performedAt', 'performedAt', { unique: false });
         ensureIndex(actionsStore, 'actionPlanId', 'actionPlanId', { unique: false });
+        ensureIndex(actionsStore, ACTION_DAY_INDEX, ['plantId', 'actionTypeId', 'performedOn'], { unique: false });
+
+        if (event.oldVersion < 5) {
+          const newestActionsByDay = new Map<string, PlantActionRecord>();
+          const cursorRequest = actionsStore.openCursor();
+
+          cursorRequest.onsuccess = () => {
+            const cursor = cursorRequest.result;
+            if (!cursor) return;
+
+            const action = cursor.value as PlantActionRecord & { performedOn?: string };
+            const performedOn = action.performedOn ?? localDateKey(action.performedAt);
+            const actionDayKey = `${action.plantId}:${action.actionTypeId}:${performedOn}`;
+            const newestAction = newestActionsByDay.get(actionDayKey);
+
+            if (!newestAction || action.performedAt.getTime() > newestAction.performedAt.getTime()) {
+              if (newestAction) {
+                actionsStore.delete(newestAction.id);
+              }
+              const migratedAction = { ...action, performedOn };
+              newestActionsByDay.set(actionDayKey, migratedAction);
+              cursor.update(migratedAction);
+            } else {
+              cursor.delete();
+            }
+
+            cursor.continue();
+          };
+        }
 
         for (const actionType of DEFAULT_ACTION_TYPES) {
-          actionTypesStore.add(actionType);
+          actionTypesStore.put(actionType);
         }
       };
 
@@ -493,22 +530,35 @@ export async function deleteActionPlan(actionPlanId: number, plantId: number) {
   await txComplete(transaction);
 }
 
-export async function logAction(plantId: number, draft: PlantActionCreateRequest) {
+export async function logAction(plantId: number, draft: PlantActionCreateRequest): Promise<LogActionResult> {
   const db = await openDatabase();
   const plant = await readOne<PlantRecord>(db, PLANTS_STORE, plantId);
   const plan = await getActionPlanForPlantAndActionType(db, plantId, draft.actionTypeId);
   const timestamp = now();
+  const performedOn = localDateKey(draft.performedAt);
 
   const transaction = db.transaction([PLANTS_STORE, ACTION_PLANS_STORE, ACTIONS_STORE], 'readwrite');
   const plantsStore = transaction.objectStore(PLANTS_STORE);
   const actionPlansStore = transaction.objectStore(ACTION_PLANS_STORE);
   const actionsStore = transaction.objectStore(ACTIONS_STORE);
+  const existingAction = (await request(
+    actionsStore.index(ACTION_DAY_INDEX).get([plantId, draft.actionTypeId, performedOn]),
+  )) as PlantActionRecord | undefined;
+
+  if (existingAction) {
+    await txComplete(transaction);
+    return {
+      status: 'already-logged',
+      action: existingAction,
+    };
+  }
 
   const action: Omit<PlantActionRecord, 'id'> = {
     plantId: plantId,
     actionTypeId: draft.actionTypeId,
     actionPlanId: plan?.id,
     performedAt: draft.performedAt,
+    performedOn,
   };
 
   const id = await request(actionsStore.put(action));
@@ -534,8 +584,11 @@ export async function logAction(plantId: number, draft: PlantActionCreateRequest
 
   await txComplete(transaction);
   return {
-    id: id as number,
-    ...action,
+    status: 'created',
+    action: {
+      id: id as number,
+      ...action,
+    },
   };
 }
 export async function deleteLoggedAction(plantId: number, plantActionId: number, actionPlanId?: number): Promise<void> {

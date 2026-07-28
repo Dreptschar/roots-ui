@@ -32,6 +32,9 @@ export type PlantActionCreateRequest = {
   performedAt: Date;
 };
 
+export type LogActionResult =
+  { status: 'created'; action: PlantActionRecord } | { status: 'already-logged'; action: PlantActionRecord };
+
 export type PlantViewModel = PlantRecord & {
   roomName?: string;
   lastWateredAt?: Date;

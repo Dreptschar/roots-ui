@@ -41,4 +41,5 @@ export type PlantActionRecord = {
   actionTypeId: number;
   actionPlanId?: number;
   performedAt: Date;
+  performedOn: string;
 };

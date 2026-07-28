@@ -21,6 +21,7 @@ export function PlantDetailPage() {
   const [planModalOpen, setPlanModalOpen] = useState(false);
   const [manualActionTypeId, setManualActionTypeId] = useState<number | undefined>();
   const [manualLogModalOpen, setManualLogModalOpen] = useState(false);
+  const [manualLogMessage, setManualLogMessage] = useState('');
   const photoUrl = useObjectUrl(plant?.photoBlob);
 
   useEffect(() => {
@@ -132,6 +133,7 @@ export function PlantDetailPage() {
             type="button"
             onClick={() => {
               setManualActionTypeId(undefined);
+              setManualLogMessage('');
               setManualLogModalOpen(true);
             }}
           >
@@ -246,6 +248,7 @@ export function PlantDetailPage() {
           onClick={() => {
             setManualLogModalOpen(false);
             setManualActionTypeId(undefined);
+            setManualLogMessage('');
           }}
         >
           <section
@@ -263,6 +266,7 @@ export function PlantDetailPage() {
                 onClick={() => {
                   setManualLogModalOpen(false);
                   setManualActionTypeId(undefined);
+                  setManualLogMessage('');
                 }}
               >
                 Close
@@ -273,9 +277,10 @@ export function PlantDetailPage() {
                 Action
                 <select
                   value={manualActionTypeId ?? ''}
-                  onChange={(event) =>
-                    setManualActionTypeId(event.target.value ? Number(event.target.value) : undefined)
-                  }
+                  onChange={(event) => {
+                    setManualActionTypeId(event.target.value ? Number(event.target.value) : undefined);
+                    setManualLogMessage('');
+                  }}
                 >
                   <option value="" disabled>
                     Choose an action
@@ -293,16 +298,28 @@ export function PlantDetailPage() {
                 disabled={manualActionTypeId === undefined}
                 onClick={async () => {
                   if (manualActionTypeId === undefined) return;
-                  await logAction({
+                  const result = await logAction({
                     actionTypeId: manualActionTypeId,
                     performedAt: new Date(),
                   });
+                  if (result?.status === 'already-logged') {
+                    const actionLabel =
+                      actionTypes.find((actionType) => actionType.id === manualActionTypeId)?.label ?? 'Action';
+                    setManualLogMessage(`${actionLabel} is already logged for today.`);
+                    return;
+                  }
                   setManualLogModalOpen(false);
                   setManualActionTypeId(undefined);
+                  setManualLogMessage('');
                 }}
               >
                 Save action
               </button>
+              {manualLogMessage ? (
+                <p className="formMessage" role="status">
+                  {manualLogMessage}
+                </p>
+              ) : null}
             </div>
           </section>
         </div>

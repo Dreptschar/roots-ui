@@ -11,7 +11,7 @@ export function RoomDetailPage() {
   const navigate = useNavigate();
   const roomId = id ? Number(id) : undefined;
   const { rooms, loading: referenceLoading, refresh } = useReferenceData();
-  const { plants, loading: plantsLoading, refresh: refreshPlants } = usePlants();
+  const { plants, loading: plantsLoading, refresh: refreshPlants, waterPlant } = usePlants();
   const [roomName, setRoomName] = useState('');
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -105,7 +105,9 @@ export function RoomDetailPage() {
 
         <div className="grid">
           {plantsInRoom.length ? (
-            plantsInRoom.map((plant) => <PlantCard key={plant.id} plant={plant} showRoom={false} />)
+            plantsInRoom.map((plant) => (
+              <PlantCard key={plant.id} plant={plant} showRoom={false} onWater={waterPlant} />
+            ))
           ) : (
             <p>No plants in this room yet.</p>
           )}

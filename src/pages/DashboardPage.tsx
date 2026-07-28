@@ -4,7 +4,7 @@ import { usePlants } from '../hooks/usePlants';
 import { PlantCard } from '../components/PlantCard';
 
 export function DashboardPage() {
-  const { plants, loading } = usePlants();
+  const { plants, waterPlant } = usePlants();
 
   return (
     <Layout title="Plants">
@@ -17,7 +17,7 @@ export function DashboardPage() {
         </div>
         <div className="grid">
           {plants.map((plant) => (
-            <PlantCard key={plant.id} plant={plant} />
+            <PlantCard key={plant.id} plant={plant} onWater={waterPlant} />
           ))}
         </div>
       </section>

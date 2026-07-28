@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { PlantViewModel } from '../types';
-import { getActionTypes, getPlant, getPlants, getRooms } from '../lib/localDb';
+import { getPlant, getPlants, getRooms, logAction } from '../lib/localDb';
 import { DEFAULT_ACTION_TYPES } from '../lib/defaultTypes';
 import { PlantRecord } from '../dbTypes';
 
@@ -36,10 +36,12 @@ export function usePlants() {
   const [plants, setPlants] = useState<PlantViewModel[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const refresh = async () => {
-    setLoading(true);
+  const refresh = async (options?: { silent?: boolean }) => {
+    if (!options?.silent) {
+      setLoading(true);
+    }
     try {
-      const [plantItems, rooms, actionTypes] = await Promise.all([getPlants(), getRooms(), getActionTypes()]);
+      const [plantItems, rooms] = await Promise.all([getPlants(), getRooms()]);
       const roomNames = new Map(rooms.map((room) => [room.id, room.name]));
       const detailData = await Promise.all(
         plantItems.map(async (plant) => ({ plant, detail: await getPlant(plant.id) })),
@@ -52,7 +54,9 @@ export function usePlants() {
     } catch {
       // Keep the list that was already fetched.
     } finally {
-      setLoading(false);
+      if (!options?.silent) {
+        setLoading(false);
+      }
     }
   };
 
@@ -60,5 +64,14 @@ export function usePlants() {
     void refresh();
   }, []);
 
-  return { plants, loading, refresh };
+  const waterPlant = async (plantId: number) => {
+    const result = await logAction(plantId, {
+      actionTypeId: DEFAULT_ACTION_TYPES[0].id,
+      performedAt: new Date(),
+    });
+    await refresh({ silent: true });
+    return result;
+  };
+
+  return { plants, loading, refresh, waterPlant };
 }

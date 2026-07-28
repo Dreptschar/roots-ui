@@ -24,9 +24,9 @@ export async function createPlant(
   }
   await page.getByRole('button', { name: 'Add plant' }).click();
 
-  const plantCard = page.getByRole('link', { name: new RegExp(plant.name) });
+  const plantCard = page.getByRole('article').filter({ hasText: plant.name });
   await expect(plantCard).toContainText(plant.room);
-  await plantCard.click();
+  await plantCard.getByRole('link', { name: new RegExp(plant.name) }).click();
 }
 
 export async function addActionPlan(page: Page, action: { label: string; intervalDays: number }) {

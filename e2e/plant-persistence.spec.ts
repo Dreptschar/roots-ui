@@ -25,9 +25,9 @@ test('creates and persists a plant with a watering schedule and action history',
   await page.getByLabel('Notes').fill('Keep near the east-facing window.');
   await page.getByRole('button', { name: 'Add plant' }).click();
 
-  const plantCard = page.getByRole('link', { name: /Monstera/ });
+  const plantCard = page.getByRole('article').filter({ hasText: 'Monstera' });
   await expect(plantCard).toContainText('Kitchen');
-  await plantCard.click();
+  await plantCard.getByRole('link', { name: /Monstera/ }).click();
 
   await expect(page.getByRole('heading', { name: 'Monstera', level: 2 })).toBeVisible();
   await expect(page.getByText('Keep near the east-facing window.')).toBeVisible();

@@ -15,7 +15,6 @@ test('deletes a watering log, schedule, and plant', async ({ page }) => {
   });
   await addWateringPlan(page, 8);
   await logWatering(page);
-  await logWatering(page);
 
   const plantPhoto = page.getByRole('img', { name: 'Pothos' });
   const actionPlans = page.getByRole('heading', { name: 'Action plans' }).locator('..').locator('..');
@@ -28,9 +27,9 @@ test('deletes a watering log, schedule, and plant', async ({ page }) => {
     .poll(() => plantPhoto.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0))
     .toBe(true);
 
-  await expect(actionRows).toHaveCount(2);
-  await swipeLeftToDelete(page, actionRows.first());
   await expect(actionRows).toHaveCount(1);
+  await swipeLeftToDelete(page, actionRows.first());
+  await expect(actionRows).toHaveCount(0);
   await expect(plantPhoto).toBeVisible();
 
   await expect(planRows).toHaveCount(1);

@@ -8,6 +8,9 @@
 - 2026-07-28T19:40:23+02:00 [USER] Split each Playwright scenario into its own file.
 - 2026-07-28T19:42:19+02:00 [USER] Add a Playwright scenario creating a custom Settings action and using it for a plan and log.
 - 2026-07-28T19:45:46+02:00 [USER] Add a plant picture to the deletion scenario and verify it survives log/schedule deletion.
+- 2026-07-28T19:55:32+02:00 [USER] Add quick watering from plant cards on dashboard and room views.
+- 2026-07-28T19:58:03+02:00 [USER] Use the default watering action emoji on the quick-water button.
+- 2026-07-28T20:06:53+02:00 [USER] Prevent logging the same plant action more than once per local calendar day.
 
 [DECISIONS]
 
@@ -25,6 +28,11 @@
 - 2026-07-28T19:40:23+02:00 [CODE] Split E2E coverage into persistence, multiple-plants, and deletion specs; shared actions live in `e2e/support/plant-helpers.ts`.
 - 2026-07-28T19:42:19+02:00 [CODE] Added `custom-action.spec.ts`; generalized shared plan/log helpers to accept custom action labels while retaining watering wrappers.
 - 2026-07-28T19:45:46+02:00 [CODE] Added an SVG photo fixture and optional photo upload support to `createPlant`; deletion E2E asserts decoded image visibility after log deletion, schedule deletion, and reload.
+- 2026-07-28T19:55:32+02:00 [CODE] `PlantCard` is now an article with separate navigation and accessible Water button; `usePlants.waterPlant` logs default watering and silently refreshes card state.
+- 2026-07-28T19:58:03+02:00 [CODE] Added shared `WATERING_EMOJI`; both the default action label and PlantCard quick-water button render `💧`.
+- 2026-07-28T20:06:53+02:00 [CODE] Action logs now store `performedOn`; `logAction` returns created/already-logged and performs a transactionally serialized same-day check without updating plans on duplicates.
+- 2026-07-28T20:06:53+02:00 [CODE] IndexedDB v5 migration backfills calendar keys, keeps the newest legacy duplicate per plant/action/day, and idempotently seeds default actions.
+- 2026-07-28T20:06:53+02:00 [CODE] Quick-water cards disable as “Watered today”; manual duplicate attempts show an informational status in the log dialog.
 
 [DISCOVERIES]
 
@@ -47,3 +55,6 @@
 - 2026-07-28T19:40:23+02:00 [TOOL] Split Playwright suite passed 6/6 executions; Vitest 5/5, Prettier, and production build also passed.
 - 2026-07-28T19:42:19+02:00 [TOOL] Custom-action Playwright suite passed 8/8 executions; Vitest 5/5, Prettier, and production build also passed.
 - 2026-07-28T19:45:46+02:00 [TOOL] Photo-preservation Playwright suite passed 8/8 executions; Vitest 5/5, Prettier, and production build also passed.
+- 2026-07-28T19:55:32+02:00 [TOOL] Quick-watering Playwright suite passed 10/10 executions across dashboard/room desktop and mobile; Vitest 5/5, Prettier, and production build also passed.
+- 2026-07-28T19:58:03+02:00 [TOOL] Emoji quick-watering Playwright spec passed 2/2; Vitest 5/5, Prettier, and production build also passed.
+- 2026-07-28T20:06:53+02:00 [TOOL] Same-day deduplication Playwright suite passed 10/10; Vitest 7/7 (including legacy migration), Prettier, and production build passed.
