@@ -21,7 +21,7 @@ test('waters from an overview card and prevents another same-day watering', asyn
   await expect(dashboardCard).toContainText('today');
   await expect(dashboardCard).toContainText('In 7 days');
   const wateredDashboardButton = dashboardCard.getByRole('button', { name: 'Monstera watered today' });
-  await expect(wateredDashboardButton).toContainText('Watered today');
+  await expect(wateredDashboardButton).toHaveText('💧');
   await expect(wateredDashboardButton).toBeDisabled();
 
   await page.getByRole('link', { name: 'Rooms', exact: true }).click();
@@ -32,7 +32,7 @@ test('waters from an overview card and prevents another same-day watering', asyn
 
   await expect(page).toHaveURL(/\/rooms\/\d+$/);
   await expect(roomCard).toContainText('today');
-  await expect(wateredRoomButton).toContainText('Watered today');
+  await expect(wateredRoomButton).toHaveText('💧');
   await expect(wateredRoomButton).toBeDisabled();
 
   await roomCard.getByRole('link', { name: /Monstera/ }).click();

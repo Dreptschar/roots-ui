@@ -121,6 +121,13 @@ select {
   margin: 0;
 }
 
+.plantCardTitleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
 .panelHeader p,
 .card p {
   margin: 4px 0 0;
@@ -166,9 +173,9 @@ select {
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  gap: 7px;
+  width: 44px;
   min-height: 44px;
-  padding: 0 14px;
+  padding: 0;
   border: 1px solid rgba(12, 91, 71, 0.14);
   border-radius: 14px;
   background: #dff0e8;
@@ -194,7 +201,7 @@ select {
 }
 
 .waterButtonEmoji {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   line-height: 1;
 }
 

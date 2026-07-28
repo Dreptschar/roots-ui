@@ -14,6 +14,8 @@
 - 2026-07-28T20:15:54+02:00 [USER] Remove unused code and dependencies, cascade custom action-type deletion to its plans/logs, and prevent deletion of occupied rooms.
 - 2026-07-28T20:19:54+02:00 [USER] Replace the persistent occupied-room deletion message with feedback shown only after pressing Delete.
 - 2026-07-28T20:24:38+02:00 [USER] Add E2E coverage for editing plants and rooms.
+- 2026-07-28T20:28:13+02:00 [USER] Make the quick-watering button emoji-only to prevent mobile layout breakage.
+- 2026-07-28T20:32:46+02:00 [USER] Replace PlantCard's labeled room metadata with the room tag styling used on plant details.
 
 [DECISIONS]
 
@@ -41,6 +43,8 @@
 - 2026-07-28T20:15:54+02:00 [CODE] Removed dead variables and unused `prop-types` packages; enabled `noUnusedLocals` and `noUnusedParameters`.
 - 2026-07-28T20:19:54+02:00 [CODE] Occupied-room Delete remains interactive and shows an accessible, auto-dismissing error toast when the database rejects deletion.
 - 2026-07-28T20:24:38+02:00 [CODE] Added separate room-edit and plant-edit Playwright specs; plant editing covers name, species, notes, room reassignment, and reload persistence.
+- 2026-07-28T20:28:13+02:00 [CODE] Plant-card quick watering is now a fixed 44px emoji-only button with state-specific accessible labels.
+- 2026-07-28T20:32:46+02:00 [CODE] Overview PlantCards show the room as a compact `inlineMeta` tag beside the plant name; room-detail cards continue to omit redundant room information.
 
 [DISCOVERIES]
 
@@ -71,3 +75,5 @@
 - 2026-07-28T20:15:54+02:00 [TOOL] Cleanup and integrity changes passed Prettier, production build, Vitest 9/9, and Playwright 12/12 across desktop and mobile Chromium.
 - 2026-07-28T20:19:54+02:00 [TOOL] Room toast change passed Prettier, production build, Vitest 9/9, and its Playwright scenario 2/2 across desktop and mobile Chromium.
 - 2026-07-28T20:24:38+02:00 [TOOL] Editing coverage passed the complete Playwright suite 16/16 across desktop and mobile; Vitest 9/9, Prettier, and production build also passed.
+- 2026-07-28T20:28:13+02:00 [TOOL] Emoji-only quick watering passed its Playwright scenario 2/2 across desktop and mobile; Vitest 9/9, Prettier, and production build also passed.
+- 2026-07-28T20:32:46+02:00 [TOOL] PlantCard room tags passed the full Playwright suite 16/16 across desktop and mobile; Vitest 9/9, Prettier, and production build also passed.

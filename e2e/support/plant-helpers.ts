@@ -25,7 +25,8 @@ export async function createPlant(
   await page.getByRole('button', { name: 'Add plant' }).click();
 
   const plantCard = page.getByRole('article').filter({ hasText: plant.name });
-  await expect(plantCard).toContainText(plant.room);
+  await expect(plantCard.locator('.inlineMeta')).toHaveText(plant.room);
+  await expect(plantCard.getByText('Room', { exact: true })).toHaveCount(0);
   await plantCard.getByRole('link', { name: new RegExp(plant.name) }).click();
 }
 

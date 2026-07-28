@@ -18,6 +18,14 @@ export function PlantCard({ plant, showRoom = true, onWater }: PlantCardProps) {
   const scheduleText = plant.nextWateringDueAt ? formatUpcomingSchedule(plant.nextWateringDueAt) : undefined;
   const wateredText = plant.lastWateredAt ? formatDaysPast(plant.lastWateredAt) : 'No watering logged';
   const wateredToday = plant.lastWateredAt ? isSameLocalDay(plant.lastWateredAt) : false;
+  const waterButtonLabel =
+    waterStatus === 'saving'
+      ? `Watering ${plant.name}`
+      : waterStatus === 'error'
+        ? `Retry watering ${plant.name}`
+        : waterStatus === 'watered' || wateredToday
+          ? `${plant.name} watered today`
+          : `Water ${plant.name}`;
 
   useEffect(
     () => () => {
@@ -47,7 +55,10 @@ export function PlantCard({ plant, showRoom = true, onWater }: PlantCardProps) {
         </div>
         <div className="cardHeader">
           <div>
-            <h2>{plant.name}</h2>
+            <div className="plantCardTitleRow">
+              <h2>{plant.name}</h2>
+              {showRoom ? <span className="inlineMeta">{plant.roomName ?? `Room #${plant.roomId}`}</span> : null}
+            </div>
             <p>{plant.species}</p>
           </div>
           {scheduleText ? (
@@ -65,31 +76,16 @@ export function PlantCard({ plant, showRoom = true, onWater }: PlantCardProps) {
             <dt>Last watered</dt>
             <dd>{wateredText}</dd>
           </div>
-          {showRoom ? (
-            <div>
-              <dt>Room</dt>
-              <dd>{plant.roomName ?? `Room #${plant.roomId}`}</dd>
-            </div>
-          ) : null}
         </dl>
         <button
           className={`waterButton${waterStatus === 'watered' || wateredToday ? ' watered' : ''}`}
           type="button"
           disabled={waterStatus === 'saving' || wateredToday}
-          aria-label={wateredToday ? `${plant.name} watered today` : `Water ${plant.name}`}
+          aria-label={waterButtonLabel}
           onClick={() => void handleWater()}
         >
           <span className="waterButtonEmoji" aria-hidden="true">
             {WATERING_EMOJI}
-          </span>
-          <span>
-            {waterStatus === 'saving'
-              ? 'Watering…'
-              : waterStatus === 'watered' || wateredToday
-                ? 'Watered today'
-                : waterStatus === 'error'
-                  ? 'Try again'
-                  : 'Water'}
           </span>
         </button>
       </div>
