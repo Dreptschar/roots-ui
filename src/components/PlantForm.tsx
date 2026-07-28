@@ -2,7 +2,7 @@ import type { FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import type { PlantCreateRequest } from '../types';
 import { createRoom } from '../lib/localDb';
-import { useObjectUrl } from '../hooks/useObjectUrl';
+import { useImageSource } from '../hooks/useImageSource';
 import { RoomRecord } from '../dbTypes';
 
 type PlantFormProps = {
@@ -70,7 +70,7 @@ export function PlantForm({
     };
   }, [roomModalOpen]);
 
-  const photoPreviewUrl = useObjectUrl(photoFile ?? initialPhotoBlob);
+  const photoPreviewUrl = useImageSource(photoFile ?? initialPhotoBlob);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

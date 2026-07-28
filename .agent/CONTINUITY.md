@@ -20,6 +20,7 @@
 - 2026-07-28T20:40:36+02:00 [USER] Apply the photo object-URL lifecycle and silent-refresh fix.
 - 2026-07-28T20:48:22+02:00 [USER] Phone retest still showed broken photos after quick watering and deleting a log entry.
 - 2026-07-28T20:52:10+02:00 [USER] Phone retest kept the detail photo after log deletion, but the first navigation to the overview showed a broken photo until another page switch.
+- 2026-07-28T20:56:27+02:00 [USER] Phone retest still reproduced the broken overview photo after the object-URL mount-cycle fix.
 
 [DECISIONS]
 
@@ -52,6 +53,7 @@
 - 2026-07-28T20:40:36+02:00 [CODE] `useObjectUrl` creates replacement URLs during render and revokes them only after replacement/unmount; plant-detail mutation refreshes are silent so photos remain mounted.
 - 2026-07-28T20:48:22+02:00 [CODE] Action-only detail/list refreshes now retain the exact in-memory photo Blob, preventing any object-URL replacement or revocation during quick watering and plan/log mutations.
 - 2026-07-28T20:52:10+02:00 [CODE] `useObjectUrl` now creates a URL in every effect setup, making React Strict Mode's setup-cleanup-setup mount cycle recreate the URL instead of leaving a memoized revoked URL.
+- 2026-07-28T20:56:27+02:00 [CODE] Removed browser `blob:` URLs from photo rendering; `useImageSource` converts IndexedDB Blobs to non-revocable data URLs for cards, details, and editor previews.
 
 [DISCOVERIES]
 
@@ -88,3 +90,4 @@
 - 2026-07-28T20:40:36+02:00 [TOOL] Photo lifecycle fix passed Playwright 16/16, including decoded-image checks after plan/log creation; Vitest 9/9, Prettier, and production build passed.
 - 2026-07-28T20:48:22+02:00 [TOOL] In-memory photo preservation passed focused photo scenarios 4/4 and full Playwright 16/16; Vitest 9/9, Prettier, and production build passed.
 - 2026-07-28T20:52:10+02:00 [TOOL] Exact log-delete → overview → detail decoded-photo regression passed 2/2; full Playwright 16/16, Vitest 9/9, Prettier, and production build passed.
+- 2026-07-28T20:56:27+02:00 [TOOL] Data-URL photo rendering passed focused regressions 4/4 and full Playwright 16/16 with assertions that image sources are `data:image/`; Vitest 9/9, Prettier, and production build passed.

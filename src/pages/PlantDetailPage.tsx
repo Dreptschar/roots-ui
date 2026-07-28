@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { formatDate } from '../lib/date';
-import { useObjectUrl } from '../hooks/useObjectUrl';
+import { useImageSource } from '../hooks/useImageSource';
 import { usePlant } from '../hooks/usePlant';
 import { useReferenceData } from '../hooks/useReferenceData';
 import { SwipeableCard } from '../components/SwipeableCard';
@@ -21,7 +21,7 @@ export function PlantDetailPage() {
   const [manualActionTypeId, setManualActionTypeId] = useState<number | undefined>();
   const [manualLogModalOpen, setManualLogModalOpen] = useState(false);
   const [manualLogMessage, setManualLogMessage] = useState('');
-  const photoUrl = useObjectUrl(plant?.photoBlob);
+  const photoUrl = useImageSource(plant?.photoBlob);
 
   useEffect(() => {
     if (!planModalOpen && !manualLogModalOpen) return;

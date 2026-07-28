@@ -17,6 +17,7 @@ test('deletes a watering log, schedule, and plant', async ({ page }) => {
   const plantPhoto = page.getByRole('img', { name: 'Pothos' });
   const expectPhotoDecoded = async () => {
     await expect(plantPhoto).toBeVisible();
+    await expect(plantPhoto).toHaveAttribute('src', /^data:image\//);
     await expect
       .poll(() => plantPhoto.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0))
       .toBe(true);
@@ -42,6 +43,7 @@ test('deletes a watering log, schedule, and plant', async ({ page }) => {
   const overviewCard = page.getByRole('article').filter({ hasText: 'Pothos' });
   const overviewPhoto = overviewCard.locator('img');
   await expect(overviewPhoto).toBeVisible();
+  await expect(overviewPhoto).toHaveAttribute('src', /^data:image\//);
   await expect.poll(() => overviewPhoto.evaluate((image: HTMLImageElement) => image.naturalWidth > 0)).toBe(true);
   await overviewCard.getByRole('link', { name: /Pothos/ }).click();
   await expectPhotoDecoded();

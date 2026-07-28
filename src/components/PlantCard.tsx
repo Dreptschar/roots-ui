@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { formatDaysPast, formatUpcomingSchedule, isSameLocalDay } from '../lib/date';
 import type { LogActionResult, PlantViewModel } from '../types';
-import { useObjectUrl } from '../hooks/useObjectUrl';
+import { useImageSource } from '../hooks/useImageSource';
 import { WATERING_EMOJI } from '../lib/defaultTypes';
 
 type PlantCardProps = {
@@ -12,7 +12,7 @@ type PlantCardProps = {
 };
 
 export function PlantCard({ plant, showRoom = true, onWater }: PlantCardProps) {
-  const photoUrl = useObjectUrl(plant.photoBlob);
+  const photoUrl = useImageSource(plant.photoBlob);
   const feedbackTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [waterStatus, setWaterStatus] = useState<'idle' | 'saving' | 'watered' | 'error'>('idle');
   const scheduleText = plant.nextWateringDueAt ? formatUpcomingSchedule(plant.nextWateringDueAt) : undefined;

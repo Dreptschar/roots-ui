@@ -20,6 +20,7 @@ test('waters from an overview card and prevents another same-day watering', asyn
   const dashboardCard = page.getByRole('article').filter({ hasText: 'Monstera' });
   const dashboardPhoto = dashboardCard.locator('img');
   await expect(dashboardCard.getByRole('button', { name: 'Water Monstera' })).toContainText('💧');
+  await expect(dashboardPhoto).toHaveAttribute('src', /^data:image\//);
   await expect.poll(() => dashboardPhoto.evaluate((image: HTMLImageElement) => image.naturalWidth > 0)).toBe(true);
   await dashboardCard.getByRole('button', { name: 'Water Monstera' }).click();
 
