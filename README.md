@@ -37,6 +37,19 @@ Frontend web app for houseplant management.
    npm run test
    ```
 
+5. Run browser UI tests:
+
+   ```bash
+   npx playwright install chromium
+   npm run test:e2e
+   ```
+
+   For Playwright's interactive runner:
+
+   ```bash
+   npm run test:e2e:ui
+   ```
+
 ## Environment
 
 There are no remote service environment variables for the current local-first setup.

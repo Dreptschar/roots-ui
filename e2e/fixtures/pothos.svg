@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480" role="img" aria-labelledby="title">
+  <title id="title">Pothos plant test fixture</title>
+  <rect width="640" height="480" fill="#e8f1e7" />
+  <path d="M285 430h70l18-130h-106z" fill="#b66f44" />
+  <path d="M320 320V115M320 220l-95-70M320 250l100-80M320 285l-115 30M320 300l105 35" fill="none" stroke="#355f49" stroke-width="12" stroke-linecap="round" />
+  <g fill="#4f8f5e">
+    <path d="M320 125c-50-75-125-45-110 20 12 52 75 47 110-20z" />
+    <path d="M225 150c-68-40-115 10-75 60 33 41 89 3 75-60z" />
+    <path d="M420 170c55-58 120-20 95 40-20 48-82 29-95-40z" />
+    <path d="M205 315c-72-28-105 30-55 70 41 33 88-15 55-70z" />
+    <path d="M425 335c68-35 110 20 65 65-37 37-88-5-65-65z" />
+  </g>
+  <g fill="#a8cf75">
+    <circle cx="265" cy="130" r="13" />
+    <circle cx="190" cy="180" r="12" />
+    <circle cx="466" cy="190" r="14" />
+    <circle cx="170" cy="350" r="12" />
+    <circle cx="470" cy="365" r="13" />
+  </g>
+</svg>
