@@ -24,7 +24,7 @@ export function usePlant(id: number | undefined) {
   const refreshVersion = useRef(0);
 
   const refresh = useCallback(
-    async (options?: { silent?: boolean }) => {
+    async (options?: { preservePhoto?: boolean; silent?: boolean }) => {
       if (id === undefined) {
         setPlant(undefined);
         setLoading(false);
@@ -46,7 +46,19 @@ export function usePlant(id: number | undefined) {
           return refreshedPlant;
         }
 
-        setPlant(refreshedPlant);
+        setPlant((currentPlant) => {
+          if (
+            !options?.preservePhoto ||
+            !currentPlant ||
+            !refreshedPlant ||
+            currentPlant.id !== refreshedPlant.id ||
+            !currentPlant.photoBlob ||
+            !refreshedPlant.photoBlob
+          ) {
+            return refreshedPlant;
+          }
+          return { ...refreshedPlant, photoBlob: currentPlant.photoBlob };
+        });
         return refreshedPlant;
       } catch (error) {
         console.error(`Failed to load plant ${id}`, error);
@@ -92,25 +104,25 @@ export function usePlant(id: number | undefined) {
     deleteActionPlan: async (actionPlanId: number, plantId: number) => {
       if (id === undefined) return;
       await deleteActionPlan(actionPlanId, plantId);
-      await refresh({ silent: true });
+      await refresh({ preservePhoto: true, silent: true });
       return;
     },
     createActionPlan: async (draft: ActionPlanCreateRequest) => {
       if (id === undefined) return;
       const saved = await createActionPlan(id, draft);
-      await refresh({ silent: true });
+      await refresh({ preservePhoto: true, silent: true });
       return saved;
     },
     logAction: async (draft: PlantActionCreateRequest) => {
       if (id === undefined) return;
       const saved = await logAction(id, draft);
-      await refresh({ silent: true });
+      await refresh({ preservePhoto: true, silent: true });
       return saved;
     },
     deleteLoggedAction: async (plantId: number, plantActionId: number, actionPlanId?: number) => {
       if (id === undefined) return;
       await deleteLoggedAction(plantId, plantActionId, actionPlanId);
-      await refresh({ silent: true });
+      await refresh({ preservePhoto: true, silent: true });
       return;
     },
   };

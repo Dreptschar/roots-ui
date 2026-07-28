@@ -1,20 +1,26 @@
 import { expect, test } from '@playwright/test';
+import { fileURLToPath } from 'node:url';
 import { addWateringPlan, createPlant, createRoom } from './support/plant-helpers';
 
 test('waters from an overview card and prevents another same-day watering', async ({ page }) => {
+  const photoPath = fileURLToPath(new URL('./fixtures/pothos.svg', import.meta.url));
+
   await page.goto('/');
   await createRoom(page, 'Living room');
   await createPlant(page, {
     name: 'Monstera',
     species: 'Monstera deliciosa',
     room: 'Living room',
+    photoPath,
   });
   await addWateringPlan(page, 7);
 
   await page.getByRole('link', { name: 'Plants', exact: true }).click();
 
   const dashboardCard = page.getByRole('article').filter({ hasText: 'Monstera' });
+  const dashboardPhoto = dashboardCard.locator('img');
   await expect(dashboardCard.getByRole('button', { name: 'Water Monstera' })).toContainText('💧');
+  await expect.poll(() => dashboardPhoto.evaluate((image: HTMLImageElement) => image.naturalWidth > 0)).toBe(true);
   await dashboardCard.getByRole('button', { name: 'Water Monstera' }).click();
 
   await expect(page).toHaveURL(/\/plants$/);
@@ -23,6 +29,7 @@ test('waters from an overview card and prevents another same-day watering', asyn
   const wateredDashboardButton = dashboardCard.getByRole('button', { name: 'Monstera watered today' });
   await expect(wateredDashboardButton).toHaveText('💧');
   await expect(wateredDashboardButton).toBeDisabled();
+  await expect.poll(() => dashboardPhoto.evaluate((image: HTMLImageElement) => image.naturalWidth > 0)).toBe(true);
 
   await page.getByRole('link', { name: 'Rooms', exact: true }).click();
   await page.getByRole('link', { name: /Living room/ }).click();

@@ -36,7 +36,7 @@ export function usePlants() {
   const [plants, setPlants] = useState<PlantViewModel[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const refresh = async (options?: { silent?: boolean }) => {
+  const refresh = async (options?: { preservePhotos?: boolean; silent?: boolean }) => {
     if (!options?.silent) {
       setLoading(true);
     }
@@ -46,11 +46,22 @@ export function usePlants() {
       const detailData = await Promise.all(
         plantItems.map(async (plant) => ({ plant, detail: await getPlant(plant.id) })),
       );
-      setPlants(
-        detailData.map(({ plant, detail }) =>
-          deriveWateringState(plant, roomNames, detail?.actions ?? [], detail?.actionPlans ?? []),
-        ),
+      const refreshedPlants = detailData.map(({ plant, detail }) =>
+        deriveWateringState(plant, roomNames, detail?.actions ?? [], detail?.actionPlans ?? []),
       );
+      setPlants((currentPlants) => {
+        if (!options?.preservePhotos) {
+          return refreshedPlants;
+        }
+
+        const currentPhotos = new Map(
+          currentPlants.filter((plant) => plant.photoBlob).map((plant) => [plant.id, plant.photoBlob]),
+        );
+        return refreshedPlants.map((plant) => {
+          const currentPhoto = currentPhotos.get(plant.id);
+          return currentPhoto && plant.photoBlob ? { ...plant, photoBlob: currentPhoto } : plant;
+        });
+      });
     } catch {
       // Keep the list that was already fetched.
     } finally {
@@ -69,7 +80,7 @@ export function usePlants() {
       actionTypeId: DEFAULT_ACTION_TYPES[0].id,
       performedAt: new Date(),
     });
-    await refresh({ silent: true });
+    await refresh({ preservePhotos: true, silent: true });
     return result;
   };
 

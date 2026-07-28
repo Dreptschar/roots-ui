@@ -36,13 +36,13 @@ test('deletes a watering log, schedule, and plant', async ({ page }) => {
   await expect(actionRows).toHaveCount(1);
   await swipeLeftToDelete(page, actionRows.first());
   await expect(actionRows).toHaveCount(0);
-  await expect(plantPhoto).toBeVisible();
+  await expectPhotoDecoded();
 
   await expect(planRows).toHaveCount(1);
   await swipeLeftToDelete(page, planRows.first());
   await expect(planRows).toHaveCount(0);
   await expect(actionPlans).toContainText('No action plans yet.');
-  await expect(plantPhoto).toBeVisible();
+  await expectPhotoDecoded();
 
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Pothos', level: 2 })).toBeVisible();
