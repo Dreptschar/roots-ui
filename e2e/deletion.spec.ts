@@ -13,19 +13,25 @@ test('deletes a watering log, schedule, and plant', async ({ page }) => {
     room: 'Office',
     photoPath,
   });
-  await addWateringPlan(page, 8);
-  await logWatering(page);
 
   const plantPhoto = page.getByRole('img', { name: 'Pothos' });
+  const expectPhotoDecoded = async () => {
+    await expect(plantPhoto).toBeVisible();
+    await expect
+      .poll(() => plantPhoto.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0))
+      .toBe(true);
+  };
+
+  await expectPhotoDecoded();
+  await addWateringPlan(page, 8);
+  await expectPhotoDecoded();
+  await logWatering(page);
+  await expectPhotoDecoded();
+
   const actionPlans = page.getByRole('heading', { name: 'Action plans' }).locator('..').locator('..');
   const recentActions = page.getByRole('heading', { name: 'Recent actions' }).locator('..');
   const actionRows = recentActions.locator('.swipeRow');
   const planRows = actionPlans.locator('.swipeRow');
-
-  await expect(plantPhoto).toBeVisible();
-  await expect
-    .poll(() => plantPhoto.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0))
-    .toBe(true);
 
   await expect(actionRows).toHaveCount(1);
   await swipeLeftToDelete(page, actionRows.first());
@@ -40,10 +46,7 @@ test('deletes a watering log, schedule, and plant', async ({ page }) => {
 
   await page.reload();
   await expect(page.getByRole('heading', { name: 'Pothos', level: 2 })).toBeVisible();
-  await expect(plantPhoto).toBeVisible();
-  await expect
-    .poll(() => plantPhoto.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0))
-    .toBe(true);
+  await expectPhotoDecoded();
 
   await page.getByRole('button', { name: 'Delete' }).click();
 

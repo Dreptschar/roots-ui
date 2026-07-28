@@ -16,6 +16,8 @@
 - 2026-07-28T20:24:38+02:00 [USER] Add E2E coverage for editing plants and rooms.
 - 2026-07-28T20:28:13+02:00 [USER] Make the quick-watering button emoji-only to prevent mobile layout breakage.
 - 2026-07-28T20:32:46+02:00 [USER] Replace PlantCard's labeled room metadata with the room tag styling used on plant details.
+- 2026-07-28T20:37:32+02:00 [USER] Diagnose photos temporarily breaking on a phone after quick watering or schedule mutations, while returning after app restart.
+- 2026-07-28T20:40:36+02:00 [USER] Apply the photo object-URL lifecycle and silent-refresh fix.
 
 [DECISIONS]
 
@@ -45,6 +47,7 @@
 - 2026-07-28T20:24:38+02:00 [CODE] Added separate room-edit and plant-edit Playwright specs; plant editing covers name, species, notes, room reassignment, and reload persistence.
 - 2026-07-28T20:28:13+02:00 [CODE] Plant-card quick watering is now a fixed 44px emoji-only button with state-specific accessible labels.
 - 2026-07-28T20:32:46+02:00 [CODE] Overview PlantCards show the room as a compact `inlineMeta` tag beside the plant name; room-detail cards continue to omit redundant room information.
+- 2026-07-28T20:40:36+02:00 [CODE] `useObjectUrl` creates replacement URLs during render and revokes them only after replacement/unmount; plant-detail mutation refreshes are silent so photos remain mounted.
 
 [DISCOVERIES]
 
@@ -57,6 +60,7 @@
 - 2026-07-28T19:38:04+02:00 [TOOL] Pixel 7 emulation did not translate mouse/CDP dragging into the component swipe; dispatching `TouchEvent` directly to `.swipeRowContent` reliably exercised mobile deletion.
 - 2026-07-28T20:10:03+02:00 [CODE] Cleanup audit found dead `wateringPlan`, `slug`, and IndexedDB result variables plus unused `prop-types` dependencies.
 - 2026-07-28T20:10:03+02:00 [CODE] Build typechecking still excludes `tests` and `e2e`; room/action-type deletion integrity and swallowed hook errors remain the higher-value cleanup areas.
+- 2026-07-28T20:37:32+02:00 [CODE] Photo data remains persisted; refresh returns a new IndexedDB Blob identity, causing `useObjectUrl` to revoke the displayed URL during effect cleanup before its state-driven replacement is committed. Detail refreshes also unmount the image via loading state. This lifecycle race is the likely phone-only broken-image cause.
 
 [OUTCOMES]
 
@@ -77,3 +81,4 @@
 - 2026-07-28T20:24:38+02:00 [TOOL] Editing coverage passed the complete Playwright suite 16/16 across desktop and mobile; Vitest 9/9, Prettier, and production build also passed.
 - 2026-07-28T20:28:13+02:00 [TOOL] Emoji-only quick watering passed its Playwright scenario 2/2 across desktop and mobile; Vitest 9/9, Prettier, and production build also passed.
 - 2026-07-28T20:32:46+02:00 [TOOL] PlantCard room tags passed the full Playwright suite 16/16 across desktop and mobile; Vitest 9/9, Prettier, and production build also passed.
+- 2026-07-28T20:40:36+02:00 [TOOL] Photo lifecycle fix passed Playwright 16/16, including decoded-image checks after plan/log creation; Vitest 9/9, Prettier, and production build passed.

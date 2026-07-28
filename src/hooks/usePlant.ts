@@ -23,39 +23,44 @@ export function usePlant(id: number | undefined) {
 
   const refreshVersion = useRef(0);
 
-  const refresh = useCallback(async () => {
-    if (id === undefined) {
-      setPlant(undefined);
-      setLoading(false);
-      return undefined;
-    }
-
-    const currentVersion = ++refreshVersion.current;
-
-    setLoading(true);
-
-    try {
-      const refreshedPlant = await getPlant(id);
-
-      // Another refresh started while this one was running.
-      // Do not let the older result overwrite the newer one.
-      if (currentVersion !== refreshVersion.current) {
-        return refreshedPlant;
-      }
-
-      setPlant(refreshedPlant);
-      return refreshedPlant;
-    } catch (error) {
-      console.error(`Failed to load plant ${id}`, error);
-
-      // Keep the currently displayed plant instead of removing its photo.
-      return undefined;
-    } finally {
-      if (currentVersion === refreshVersion.current) {
+  const refresh = useCallback(
+    async (options?: { silent?: boolean }) => {
+      if (id === undefined) {
+        setPlant(undefined);
         setLoading(false);
+        return undefined;
       }
-    }
-  }, [id]);
+
+      const currentVersion = ++refreshVersion.current;
+
+      if (!options?.silent) {
+        setLoading(true);
+      }
+
+      try {
+        const refreshedPlant = await getPlant(id);
+
+        // Another refresh started while this one was running.
+        // Do not let the older result overwrite the newer one.
+        if (currentVersion !== refreshVersion.current) {
+          return refreshedPlant;
+        }
+
+        setPlant(refreshedPlant);
+        return refreshedPlant;
+      } catch (error) {
+        console.error(`Failed to load plant ${id}`, error);
+
+        // Keep the currently displayed plant instead of removing its photo.
+        return undefined;
+      } finally {
+        if (currentVersion === refreshVersion.current && !options?.silent) {
+          setLoading(false);
+        }
+      }
+    },
+    [id],
+  );
 
   useEffect(() => {
     void refresh();
@@ -74,7 +79,7 @@ export function usePlant(id: number | undefined) {
     savePlant: async (draft: PlantCreateRequest | PlantUpdateRequest, existingId?: number) => {
       if (existingId !== undefined) {
         const saved = await updatePlant(draft, existingId);
-        await refresh();
+        await refresh({ silent: true });
         return saved;
       }
 
@@ -87,25 +92,25 @@ export function usePlant(id: number | undefined) {
     deleteActionPlan: async (actionPlanId: number, plantId: number) => {
       if (id === undefined) return;
       await deleteActionPlan(actionPlanId, plantId);
-      await refresh();
+      await refresh({ silent: true });
       return;
     },
     createActionPlan: async (draft: ActionPlanCreateRequest) => {
       if (id === undefined) return;
       const saved = await createActionPlan(id, draft);
-      await refresh();
+      await refresh({ silent: true });
       return saved;
     },
     logAction: async (draft: PlantActionCreateRequest) => {
       if (id === undefined) return;
       const saved = await logAction(id, draft);
-      await refresh();
+      await refresh({ silent: true });
       return saved;
     },
     deleteLoggedAction: async (plantId: number, plantActionId: number, actionPlanId?: number) => {
       if (id === undefined) return;
       await deleteLoggedAction(plantId, plantActionId, actionPlanId);
-      await refresh();
+      await refresh({ silent: true });
       return;
     },
   };
