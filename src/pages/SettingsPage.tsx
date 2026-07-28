@@ -6,7 +6,7 @@ import { SwipeableCard } from '../components/SwipeableCard';
 import { DEFAULT_ACTION_TYPES } from '../lib/defaultTypes';
 
 export function SettingsPage() {
-  const { actionTypes, loading, refresh } = useReferenceData();
+  const { actionTypes, refresh } = useReferenceData();
   const [actionTypeLabel, setActionTypeLabel] = useState('');
   const [actionTypeModalOpen, setActionTypeModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);

@@ -606,6 +606,23 @@ select {
   overflow: auto;
 }
 
+.toast {
+  position: fixed;
+  right: 16px;
+  bottom: 92px;
+  z-index: 30;
+  width: min(calc(100% - 32px), 420px);
+  padding: 14px 16px;
+  border-radius: 14px;
+  color: #fff;
+  background: #103b31;
+  box-shadow: 0 16px 40px rgba(9, 20, 16, 0.24);
+}
+
+.toastError {
+  background: #9f2d2d;
+}
+
 .bottomNav {
   position: fixed;
   left: 50%;

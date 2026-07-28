@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { addActionPlan, createPlant, createRoom, logAction } from './support/plant-helpers';
+import { addActionPlan, createPlant, createRoom, logAction, swipeLeftToDelete } from './support/plant-helpers';
 
 test('creates a custom action and uses it for a schedule and log entry', async ({ page }) => {
   await page.goto('/');
@@ -39,5 +39,13 @@ test('creates a custom action and uses it for a schedule and log entry', async (
 
   await page.getByRole('link', { name: 'Settings', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Settings', level: 1 })).toBeVisible();
-  await expect(page.getByRole('main').getByText('Misting', { exact: true })).toBeVisible();
+  const mistingRow = page.locator('.swipeRow').filter({ hasText: 'Misting' });
+  await expect(mistingRow).toHaveCount(1);
+  await swipeLeftToDelete(page, mistingRow);
+  await expect(mistingRow).toHaveCount(0);
+
+  await page.getByRole('link', { name: 'Plants', exact: true }).click();
+  await page.getByRole('link', { name: /Boston Fern/ }).click();
+  await expect(actionPlans).toContainText('No action plans yet.');
+  await expect(recentActions).toContainText('No actions logged yet.');
 });

@@ -6,12 +6,11 @@ import { useReferenceData } from '../hooks/useReferenceData';
 import { createRoom } from '../lib/localDb';
 
 export function RoomsPage() {
-  const { plants, loading: plantsLoading } = usePlants();
-  const { rooms, loading: roomsLoading, refresh } = useReferenceData();
+  const { plants } = usePlants();
+  const { rooms, refresh } = useReferenceData();
   const [roomName, setRoomName] = useState('');
   const [roomModalOpen, setRoomModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const loading = plantsLoading || roomsLoading;
 
   useEffect(() => {
     if (!roomModalOpen) return;

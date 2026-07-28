@@ -11,12 +11,16 @@
 - 2026-07-28T19:55:32+02:00 [USER] Add quick watering from plant cards on dashboard and room views.
 - 2026-07-28T19:58:03+02:00 [USER] Use the default watering action emoji on the quick-water button.
 - 2026-07-28T20:06:53+02:00 [USER] Prevent logging the same plant action more than once per local calendar day.
+- 2026-07-28T20:15:54+02:00 [USER] Remove unused code and dependencies, cascade custom action-type deletion to its plans/logs, and prevent deletion of occupied rooms.
+- 2026-07-28T20:19:54+02:00 [USER] Replace the persistent occupied-room deletion message with feedback shown only after pressing Delete.
+- 2026-07-28T20:24:38+02:00 [USER] Add E2E coverage for editing plants and rooms.
 
 [DECISIONS]
 
 - 2026-07-28T19:15:53+02:00 [TOOL] Used existing local dependencies because Docker daemon access was unavailable; no packages were installed.
 - 2026-07-28T19:24:38+02:00 [CODE] Added repository-wide `format` and `format:check` scripts and excluded generated/dependency directories.
 - 2026-07-28T19:30:04+02:00 [CODE] Playwright runs the same IndexedDB-backed user journey in desktop Chrome and Pixel 7 profiles against a managed Vite server.
+- 2026-07-28T20:15:54+02:00 [CODE] Referential deletion rules are enforced atomically in the IndexedDB layer; UI state is an additional affordance, not the integrity boundary.
 
 [PROGRESS]
 
@@ -33,6 +37,10 @@
 - 2026-07-28T20:06:53+02:00 [CODE] Action logs now store `performedOn`; `logAction` returns created/already-logged and performs a transactionally serialized same-day check without updating plans on duplicates.
 - 2026-07-28T20:06:53+02:00 [CODE] IndexedDB v5 migration backfills calendar keys, keeps the newest legacy duplicate per plant/action/day, and idempotently seeds default actions.
 - 2026-07-28T20:06:53+02:00 [CODE] Quick-water cards disable as “Watered today”; manual duplicate attempts show an informational status in the log dialog.
+- 2026-07-28T20:15:54+02:00 [CODE] Action-type deletion now removes every matching plan and logged action in one transaction; room deletion returns `in-use` with a plant count unless the room is empty.
+- 2026-07-28T20:15:54+02:00 [CODE] Removed dead variables and unused `prop-types` packages; enabled `noUnusedLocals` and `noUnusedParameters`.
+- 2026-07-28T20:19:54+02:00 [CODE] Occupied-room Delete remains interactive and shows an accessible, auto-dismissing error toast when the database rejects deletion.
+- 2026-07-28T20:24:38+02:00 [CODE] Added separate room-edit and plant-edit Playwright specs; plant editing covers name, species, notes, room reassignment, and reload persistence.
 
 [DISCOVERIES]
 
@@ -43,6 +51,8 @@
 - 2026-07-28T19:15:53+02:00 [CODE] TypeScript compilation includes only `src`, so stale test API usage is not caught during `npm run build`.
 - 2026-07-28T19:30:04+02:00 [TOOL] Sandbox-local Vite listen returned `EPERM`; E2E execution requires approved local-server access. Playwright Chromium 149 fallback for Ubuntu 24.04 was cached successfully.
 - 2026-07-28T19:38:04+02:00 [TOOL] Pixel 7 emulation did not translate mouse/CDP dragging into the component swipe; dispatching `TouchEvent` directly to `.swipeRowContent` reliably exercised mobile deletion.
+- 2026-07-28T20:10:03+02:00 [CODE] Cleanup audit found dead `wateringPlan`, `slug`, and IndexedDB result variables plus unused `prop-types` dependencies.
+- 2026-07-28T20:10:03+02:00 [CODE] Build typechecking still excludes `tests` and `e2e`; room/action-type deletion integrity and swallowed hook errors remain the higher-value cleanup areas.
 
 [OUTCOMES]
 
@@ -58,3 +68,6 @@
 - 2026-07-28T19:55:32+02:00 [TOOL] Quick-watering Playwright suite passed 10/10 executions across dashboard/room desktop and mobile; Vitest 5/5, Prettier, and production build also passed.
 - 2026-07-28T19:58:03+02:00 [TOOL] Emoji quick-watering Playwright spec passed 2/2; Vitest 5/5, Prettier, and production build also passed.
 - 2026-07-28T20:06:53+02:00 [TOOL] Same-day deduplication Playwright suite passed 10/10; Vitest 7/7 (including legacy migration), Prettier, and production build passed.
+- 2026-07-28T20:15:54+02:00 [TOOL] Cleanup and integrity changes passed Prettier, production build, Vitest 9/9, and Playwright 12/12 across desktop and mobile Chromium.
+- 2026-07-28T20:19:54+02:00 [TOOL] Room toast change passed Prettier, production build, Vitest 9/9, and its Playwright scenario 2/2 across desktop and mobile Chromium.
+- 2026-07-28T20:24:38+02:00 [TOOL] Editing coverage passed the complete Playwright suite 16/16 across desktop and mobile; Vitest 9/9, Prettier, and production build also passed.

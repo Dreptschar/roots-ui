@@ -5,7 +5,6 @@ import { formatDate } from '../lib/date';
 import { useObjectUrl } from '../hooks/useObjectUrl';
 import { usePlant } from '../hooks/usePlant';
 import { useReferenceData } from '../hooks/useReferenceData';
-import { DEFAULT_ACTION_TYPES } from '../lib/defaultTypes';
 import { SwipeableCard } from '../components/SwipeableCard';
 
 export function PlantDetailPage() {
@@ -52,7 +51,6 @@ export function PlantDetailPage() {
     );
   }
 
-  const wateringPlan = plant.actionPlans?.find((plan) => plan.actionTypeId === DEFAULT_ACTION_TYPES[0].id);
   const room = plant.room ?? rooms.find((item) => item.id === plant.roomId);
 
   return (

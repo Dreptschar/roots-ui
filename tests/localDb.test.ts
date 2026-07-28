@@ -5,7 +5,10 @@ import {
   createActionType,
   createPlant,
   createRoom,
+  deleteActionType,
   deletePlant,
+  deleteRoom,
+  getActionTypes,
   getPlant,
   getRooms,
   logAction,
@@ -246,5 +249,51 @@ describe('localDb', () => {
     expect(await getStoreCount('plants')).toBe(0);
     expect(await getStoreCount('actionPlans')).toBe(0);
     expect(await getStoreCount('actions')).toBe(0);
+  });
+
+  it('deletes an action type and all plans and logs that use it', async () => {
+    const room = await createRoom({ name: 'Office' });
+    const misting = await createActionType({ label: 'Misting' });
+    const plant = await createPlant({
+      name: 'Fern',
+      species: 'Nephrolepis exaltata',
+      roomId: room.id,
+      notes: '',
+    });
+
+    await createActionPlan(plant.id, {
+      actionTypeId: misting.id,
+      intervalDays: 3,
+      active: true,
+    });
+    await logAction(plant.id, {
+      actionTypeId: misting.id,
+      performedAt: new Date('2026-07-14T09:00:00.000Z'),
+    });
+
+    const result = await deleteActionType(misting.id);
+
+    expect(result).toEqual({ deletedActions: 1, deletedPlans: 1 });
+    expect((await getActionTypes()).some((actionType) => actionType.id === misting.id)).toBe(false);
+    expect((await getPlant(plant.id))?.actionPlans).toHaveLength(0);
+    expect((await getPlant(plant.id))?.actions).toHaveLength(0);
+  });
+
+  it('only deletes a room after its plants have been removed', async () => {
+    const room = await createRoom({ name: 'Office' });
+    const plant = await createPlant({
+      name: 'Pothos',
+      species: 'Epipremnum aureum',
+      roomId: room.id,
+      notes: '',
+    });
+
+    expect(await deleteRoom(room.id)).toEqual({ status: 'in-use', plantCount: 1 });
+    expect((await getRooms()).some((item) => item.id === room.id)).toBe(true);
+
+    await deletePlant(plant.id);
+
+    expect(await deleteRoom(room.id)).toEqual({ status: 'deleted' });
+    expect((await getRooms()).some((item) => item.id === room.id)).toBe(false);
   });
 });

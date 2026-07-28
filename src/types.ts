@@ -35,6 +35,13 @@ export type PlantActionCreateRequest = {
 export type LogActionResult =
   { status: 'created'; action: PlantActionRecord } | { status: 'already-logged'; action: PlantActionRecord };
 
+export type DeleteRoomResult = { status: 'deleted' } | { status: 'in-use'; plantCount: number };
+
+export type DeleteActionTypeResult = {
+  deletedActions: number;
+  deletedPlans: number;
+};
+
 export type PlantViewModel = PlantRecord & {
   roomName?: string;
   lastWateredAt?: Date;

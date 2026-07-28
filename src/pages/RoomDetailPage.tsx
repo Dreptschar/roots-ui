@@ -15,6 +15,7 @@ export function RoomDetailPage() {
   const [roomName, setRoomName] = useState('');
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState('');
 
   const room = useMemo(() => rooms.find((item) => item.id === roomId), [rooms, roomId]);
   const plantsInRoom = useMemo(() => plants.filter((plant) => plant.roomId === roomId), [plants, roomId]);
@@ -32,6 +33,12 @@ export function RoomDetailPage() {
       document.body.style.overflow = previousOverflow;
     };
   }, [editModalOpen]);
+
+  useEffect(() => {
+    if (!deleteMessage) return;
+    const timeoutId = window.setTimeout(() => setDeleteMessage(''), 4000);
+    return () => window.clearTimeout(timeoutId);
+  }, [deleteMessage]);
 
   async function handleUpdateRoom(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -77,9 +84,16 @@ export function RoomDetailPage() {
           <button
             className="dangerButton"
             type="button"
-            disabled={plantsInRoom.length > 0}
             onClick={async () => {
-              await deleteRoom(room.id);
+              setDeleteMessage('');
+              const result = await deleteRoom(room.id);
+              if (result.status === 'in-use') {
+                setDeleteMessage(
+                  `Move or delete the ${result.plantCount} plant${result.plantCount === 1 ? '' : 's'} in this room first.`,
+                );
+                await refreshPlants();
+                return;
+              }
               await refresh();
               await refreshPlants();
               navigate('/rooms');
@@ -113,6 +127,12 @@ export function RoomDetailPage() {
           )}
         </div>
       </section>
+
+      {deleteMessage ? (
+        <div className="toast toastError" role="alert" aria-live="assertive">
+          {deleteMessage}
+        </div>
+      ) : null}
 
       {editModalOpen ? (
         <div className="modalBackdrop" role="presentation" onClick={() => setEditModalOpen(false)}>

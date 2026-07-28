@@ -7,6 +7,8 @@ import {
   PlantUpdateRequest,
   LogActionResult,
   RoomCreateRequest,
+  DeleteActionTypeResult,
+  DeleteRoomResult,
 } from '../types';
 import { DEFAULT_ACTION_TYPES } from './defaultTypes';
 import { ActionPlanRecord, ActionTypeRecord, PlantActionRecord, PlantRecord, RoomRecord } from '../dbTypes';
@@ -285,12 +287,20 @@ export async function updateRoom(roomId: number, draft: RoomCreateRequest) {
   return room;
 }
 
-export async function deleteRoom(roomId: number) {
+export async function deleteRoom(roomId: number): Promise<DeleteRoomResult> {
   const db = await openDatabase();
-  const transaction = db.transaction(ROOMS_STORE, 'readwrite');
-  const store = transaction.objectStore(ROOMS_STORE);
-  await request(store.delete(roomId));
+  const transaction = db.transaction([ROOMS_STORE, PLANTS_STORE], 'readwrite');
+  const plants = (await request(transaction.objectStore(PLANTS_STORE).getAll())) as PlantRecord[];
+  const plantCount = plants.filter((plant) => plant.roomId === roomId).length;
+
+  if (plantCount > 0) {
+    await txComplete(transaction);
+    return { status: 'in-use', plantCount };
+  }
+
+  await request(transaction.objectStore(ROOMS_STORE).delete(roomId));
   await txComplete(transaction);
+  return { status: 'deleted' };
 }
 
 export async function getActionTypes() {
@@ -298,21 +308,32 @@ export async function getActionTypes() {
   const actionTypes = await readAll<ActionTypeRecord>(db, ACTION_TYPES_STORE);
   return actionTypes.sort((left, right) => left.label.localeCompare(right.label));
 }
-export async function deleteActionType(id: number) {
+export async function deleteActionType(id: number): Promise<DeleteActionTypeResult> {
   const db = await openDatabase();
-  const transaction = db.transaction(ACTION_TYPES_STORE, 'readwrite');
-  const store = transaction.objectStore(ACTION_TYPES_STORE);
-  await request(store.delete(id));
+  const transaction = db.transaction([ACTION_TYPES_STORE, ACTION_PLANS_STORE, ACTIONS_STORE], 'readwrite');
+  const plansStore = transaction.objectStore(ACTION_PLANS_STORE);
+  const actionsStore = transaction.objectStore(ACTIONS_STORE);
+  const [plans, actions] = await Promise.all([
+    request(plansStore.getAll()) as Promise<ActionPlanRecord[]>,
+    request(actionsStore.getAll()) as Promise<PlantActionRecord[]>,
+  ]);
+  const matchingPlans = plans.filter((plan) => plan.actionTypeId === id);
+  const matchingActions = actions.filter((action) => action.actionTypeId === id);
+
+  matchingPlans.forEach((plan) => plansStore.delete(plan.id));
+  matchingActions.forEach((action) => actionsStore.delete(action.id));
+  await request(transaction.objectStore(ACTION_TYPES_STORE).delete(id));
   await txComplete(transaction);
+
+  return {
+    deletedActions: matchingActions.length,
+    deletedPlans: matchingPlans.length,
+  };
 }
 
 export async function createActionType(draft: ActionTypeCreateRequest) {
   const db = await openDatabase();
   const label = requireText(draft.label, 'Action type label');
-  const slug = label
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 
   const transaction = db.transaction(ACTION_TYPES_STORE, 'readwrite');
   const store = transaction.objectStore(ACTION_TYPES_STORE);
@@ -454,7 +475,7 @@ export async function updateActionPlan(plantId: number, draft: ActionPlanCreateR
     updatedAt: timestamp,
   };
 
-  const id = await request(actionPlansStore.put(record));
+  await request(actionPlansStore.put(record));
 
   if (plant) {
     await request(
