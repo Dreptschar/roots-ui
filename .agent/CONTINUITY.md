@@ -19,6 +19,7 @@
 - 2026-07-28T20:37:32+02:00 [USER] Diagnose photos temporarily breaking on a phone after quick watering or schedule mutations, while returning after app restart.
 - 2026-07-28T20:40:36+02:00 [USER] Apply the photo object-URL lifecycle and silent-refresh fix.
 - 2026-07-28T20:48:22+02:00 [USER] Phone retest still showed broken photos after quick watering and deleting a log entry.
+- 2026-07-28T20:52:10+02:00 [USER] Phone retest kept the detail photo after log deletion, but the first navigation to the overview showed a broken photo until another page switch.
 
 [DECISIONS]
 
@@ -50,6 +51,7 @@
 - 2026-07-28T20:32:46+02:00 [CODE] Overview PlantCards show the room as a compact `inlineMeta` tag beside the plant name; room-detail cards continue to omit redundant room information.
 - 2026-07-28T20:40:36+02:00 [CODE] `useObjectUrl` creates replacement URLs during render and revokes them only after replacement/unmount; plant-detail mutation refreshes are silent so photos remain mounted.
 - 2026-07-28T20:48:22+02:00 [CODE] Action-only detail/list refreshes now retain the exact in-memory photo Blob, preventing any object-URL replacement or revocation during quick watering and plan/log mutations.
+- 2026-07-28T20:52:10+02:00 [CODE] `useObjectUrl` now creates a URL in every effect setup, making React Strict Mode's setup-cleanup-setup mount cycle recreate the URL instead of leaving a memoized revoked URL.
 
 [DISCOVERIES]
 
@@ -85,3 +87,4 @@
 - 2026-07-28T20:32:46+02:00 [TOOL] PlantCard room tags passed the full Playwright suite 16/16 across desktop and mobile; Vitest 9/9, Prettier, and production build also passed.
 - 2026-07-28T20:40:36+02:00 [TOOL] Photo lifecycle fix passed Playwright 16/16, including decoded-image checks after plan/log creation; Vitest 9/9, Prettier, and production build passed.
 - 2026-07-28T20:48:22+02:00 [TOOL] In-memory photo preservation passed focused photo scenarios 4/4 and full Playwright 16/16; Vitest 9/9, Prettier, and production build passed.
+- 2026-07-28T20:52:10+02:00 [TOOL] Exact log-delete → overview → detail decoded-photo regression passed 2/2; full Playwright 16/16, Vitest 9/9, Prettier, and production build passed.

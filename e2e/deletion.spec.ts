@@ -38,6 +38,14 @@ test('deletes a watering log, schedule, and plant', async ({ page }) => {
   await expect(actionRows).toHaveCount(0);
   await expectPhotoDecoded();
 
+  await page.getByRole('link', { name: 'Plants', exact: true }).click();
+  const overviewCard = page.getByRole('article').filter({ hasText: 'Pothos' });
+  const overviewPhoto = overviewCard.locator('img');
+  await expect(overviewPhoto).toBeVisible();
+  await expect.poll(() => overviewPhoto.evaluate((image: HTMLImageElement) => image.naturalWidth > 0)).toBe(true);
+  await overviewCard.getByRole('link', { name: /Pothos/ }).click();
+  await expectPhotoDecoded();
+
   await expect(planRows).toHaveCount(1);
   await swipeLeftToDelete(page, planRows.first());
   await expect(planRows).toHaveCount(0);
